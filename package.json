@@ -11,7 +11,7 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "npm install mocha && ./node_modules/.bin/mocha",
+    "test": "npm install mocha && ./node_modules/mocha/bin/mocha --reporter spec ./test/",
     "install": "node-gyp configure rebuild"
   },
   "author": "Ian Matyssik",
