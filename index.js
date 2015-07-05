@@ -1,3 +1,3 @@
-var short_duid = require( './build/Release/shortduid' );
+var short_duid = require( 'bindings' )( 'shortduid' );
 
 exports.init = short_duid.ShortDUID;

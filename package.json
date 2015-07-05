@@ -9,9 +9,11 @@
     "bignum": "*",
     "mocha": "*"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bindings": "*"
+  },
   "scripts": {
-    "test": "npm install mocha && ./node_modules/mocha/bin/mocha --reporter spec ./test/",
+    "test": "./node_modules/mocha/bin/mocha --reporter spec ./test/",
     "install": "node-gyp configure rebuild"
   },
   "author": "Ian Matyssik",
