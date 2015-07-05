@@ -26,7 +26,8 @@ namespace shortduid {
   }
 
   void ShortDUID::Init(Local<Object> exports) {
-	Isolate* isolate = exports->GetIsolate();
+	//Isolate* isolate = exports->GetIsolate(); //Only works in iojs case
+	Isolate* isolate = Isolate::GetCurrent();
 
 	// Prepare constructor template
 	Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
