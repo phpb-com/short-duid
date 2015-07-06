@@ -5,22 +5,9 @@ Looking around for what is available, I failed to find anything that would be si
 
 The id is a 64bit unsigned integer with 42bit used for current timestamp in milliseconds, 10 bit used for shard id, and final 12 bit are used for revolving sequence.
 
-<table style="width=100%">
-  <caption>DUID bit-wise layout in 64bit unsigned integer</caption>
-  <tbody>
-  <tr style="text-align:center;width:100%">
-    <td style="background-color:rgb(128, 255, 213);width:66%">
-    42bit<br />timestamp_ms
-    </td>
-    <td style="background-color:rgb(105, 201, 246);width:16%">
-    10bit<br />shard_id
-    </td>
-    <td style="background-color:rgb(198, 115, 219);width:18%">
-    12bit<br />sequence
-    </td>
-  </tr>
-  <tbody>
-</table>
+| timestamp_ms | shard_id | sequence |
+|---|---|---|
+| 42bit | 10bit | 12bit |
 
 ## short-duid
 
@@ -126,7 +113,7 @@ Returns random string that is suitable for temporary password, not URL safe. Def
 <hr />
 #### Example #1
 Simplest example to execute all of the major methods of the module.
-<pre>
+`
 var duid = require('short-duid');
 var duid_instance = duid.init(0, "my salt", 0);
 console.log(duid_instance.getDUID(10));
@@ -135,13 +122,13 @@ console.log(duid_instance.getRandomAPIKey(32));
 console.log(duid_instance.getRandomPassword(8));
 console.log(duid_instance.hashidEncode([1234]));
 console.log(duid_instance.hashidDecode('3nMMYV0PvMl'));
-</pre>
+`
 
 #### Example #2
 More complete example that will create API server with help of koajs and reply to queries.
 
 ##### package.json
-<pre>
+`
 {
   "name": "ShortDUIDAPIServer",
   "description": "ShortDUID Example API Service",
@@ -157,10 +144,10 @@ More complete example that will create API server with help of koajs and reply t
     "short-duid": "*"
   }
 }
-</pre>
+`
 
 ##### index.js
-<pre>
+`
 'use strict';
 var pm2 = require('pm2');
 
@@ -200,10 +187,10 @@ pm2.connect(function() {
     pm2.disconnect();
   });
 });
-</pre>
+`
 
 ##### api_server.js
-<pre>
+`
 'use strict';
 var koa = require('koa');
 var router = require('koa-router')();
@@ -264,14 +251,14 @@ app
   .use(router.allowedMethods());
 
 app.listen(app.port);
-</pre>
+`
 
 And then you should install application with `npm install --save` and start the server by `node index.js`. You can check the logs and also list the processes with `./node_modules/.bin/pm2 list`. Getting fresh id can be done by curl: `curl http://localhost:65000/duid/`.
 
 ### Testing
-`npm install node-gyp -g && npm install short-duid --save-dev` <br />
+`npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
-<pre>
+`
 > short-duid@1.1.0 test ./short-duid
 > mocha
 
@@ -317,8 +304,7 @@ And then you should install application with `npm install --save` and start the 
 
 
   29 passing (169ms)
-</pre>
-
+`
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
 - Simplify API further
