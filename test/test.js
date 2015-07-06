@@ -1,5 +1,6 @@
 var duid = require( '../index' );
 var assert = require( "assert" );
+var test = require( "unit.js" );
 var async = require( "async" );
 var bignum = require( "bignum" );
 
