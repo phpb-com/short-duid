@@ -17,7 +17,7 @@ The id is a 64bit unsigned integer with 42bit used for current timestamp in mill
 
 ### Requirements
 - gcc 4.7+ with C++11 or clang 3.4+
-- node.js 12+ (maybe will work on earlier versions too) or iojs 2.0.0+
+- node.js 0.11+ or iojs 2.0.0+
 - node-gyp
 
 ### Features
