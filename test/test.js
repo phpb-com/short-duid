@@ -194,10 +194,27 @@ describe( 'Short DUID', function () {
     var drift = duid_instance3.driftTime( Math.random() * 1000 * 10 * -1 | 0 );
     var id2 = bignum( duid_instance3.getDUIDInt( 4096 )[ 4095 ], 10 ); //Need to rollover sequence
     var curr_ms_time = bignum( duid_instance3.getCurrentTimeMs(), 10 );
-    duid_instance3.driftTime( 0 ); //Reset drift back to 0
+    drift = duid_instance3.driftTime( 0 ); //Reset drift back to 0
 
     it( 'should generate ID with ' + drift + ' millisecond drift into the past from now( ' + curr_ms_time + ' ), ' + id1 + ' should be numerically smaller than ' + id2, function () {
       assert.ok( id2.gt( id1 ), id2 + ' > ' + id1 );
+    } );
+
+    it( 'should consistently generate unique IDs even when time is drifting backwards constantly', function () {
+      var duids = [];
+      var merged = [];
+      for(var i = 0; i < 10; ++i) {
+        duid_instance3.driftTime( drift );
+        var start = (new Date()).getTime();
+        duids[i] = duid_instance3.getDUIDInt( 8192 );
+        drift = start - (new Date()).getTime();
+        assert.ok( drift < 0, 'drift should be less than 0: ' + drift );
+
+        assert.equal(duids[i].length, 8192, 'returned array of DUIDs should be 8192 IDs long: ' + duids[i].length);
+      }
+      merged = merged.concat.apply(merged, duids);
+      assert.ok( check_duplicates( merged ), 'resulting array should have no duplicates' );
+      assert.equal(merged.length, 81920, 'returned array of DUIDs should be 81920 IDs long: ' + merged.length);
     } );
 
   } );
