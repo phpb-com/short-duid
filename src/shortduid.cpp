@@ -20,6 +20,10 @@ namespace shortduid {
 	time_offset_ = 0;
 	sequence_ = 0ULL;
 	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;                             //If I only did this in the beginning, always initialize your variables!
+  //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
+  if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
+    epoch_start_ = 0ULL;
+    }
   }
 
   ShortDUID::~ShortDUID() {

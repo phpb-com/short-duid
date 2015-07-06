@@ -100,6 +100,19 @@ describe( 'Short DUID', function () {
       assert.equal( duid_instance1.getEpochStart(), duid_instance2.getEpochStart() );
     } );
 
+    it( 'should reset custom epoch to zero if given one larger than real epoch', function () {
+      var custom_epoch_overflow = (new Date()).getTime() + (1000 * 1000);
+      var duid_instance_overflow = new init( 0, salt, custom_epoch_overflow );
+      assert.equal( duid_instance_overflow.getEpochStart(), 0 );
+      assert.notEqual( duid_instance_overflow.getEpochStart(), custom_epoch_overflow );
+    } );
+
+    it( 'should accept custom epoch that is even 1 millisecond in the past', function () {
+      var custom_epoch_near = (new Date()).getTime() - 1;
+      var duid_instance_near = new init( 0, salt, custom_epoch_near );
+      assert.equal( duid_instance_near.getEpochStart(), custom_epoch_near );
+    } );
+
   } );
 
   describe( '#getSalt()', function () {
