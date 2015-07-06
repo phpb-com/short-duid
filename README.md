@@ -113,7 +113,7 @@ Returns random string that is suitable for temporary password, not URL safe. Def
 <hr />
 #### Example #1
 Simplest example to execute all of the major methods of the module.
-`
+<pre>
 var duid = require('short-duid');
 var duid_instance = duid.init(0, "my salt", 0);
 console.log(duid_instance.getDUID(10));
@@ -122,13 +122,13 @@ console.log(duid_instance.getRandomAPIKey(32));
 console.log(duid_instance.getRandomPassword(8));
 console.log(duid_instance.hashidEncode([1234]));
 console.log(duid_instance.hashidDecode('3nMMYV0PvMl'));
-`
+</pre>
 
 #### Example #2
 More complete example that will create API server with help of koajs and reply to queries.
 
 ##### package.json
-`
+<pre>
 {
   "name": "ShortDUIDAPIServer",
   "description": "ShortDUID Example API Service",
@@ -144,10 +144,10 @@ More complete example that will create API server with help of koajs and reply t
     "short-duid": "*"
   }
 }
-`
+</pre>
 
 ##### index.js
-`
+<pre>
 'use strict';
 var pm2 = require('pm2');
 
@@ -187,10 +187,10 @@ pm2.connect(function() {
     pm2.disconnect();
   });
 });
-`
+</pre>
 
 ##### api_server.js
-`
+<pre>
 'use strict';
 var koa = require('koa');
 var router = require('koa-router')();
@@ -251,7 +251,7 @@ app
   .use(router.allowedMethods());
 
 app.listen(app.port);
-`
+</pre>
 
 And then you should install application with `npm install --save` and start the server by `node index.js`. You can check the logs and also list the processes with `./node_modules/.bin/pm2 list`. Getting fresh id can be done by curl: `curl http://localhost:65000/duid/`.
 
