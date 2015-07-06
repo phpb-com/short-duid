@@ -262,51 +262,53 @@ And then you should install application with `npm install --save` and start the 
 `npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
 <pre>
-> short-duid@1.1.0 test ./short-duid
-> mocha
-
+2.11s$ npm test
+  short-duid@1.1.7 test /home/travis/build/phpb-com/short-duid
+  ./node_modules/mocha/bin/mocha --reporter spec ./test/
   Short DUID
     #hashidEncode() and #hashidDecode()
-      ✓ should produce identical hashids from both instances for: 40859922
-      ✓ should produce different hashids for two different integers: 40859922 and 605311279
-      ✓ decode should return same integer given output of encode as argument passed to encode: 586518832
-      ✓ decode should return same array of integers given output of encode as argument passed to encode: 40859922,605311279,586518832
-      ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
-      ✓ should return hashid that is equal to [123456] given "LeGxr" as argument
-      ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
-      ✓ should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument
+  ✓ should produce identical hashids from both instances for: 403622383
+  ✓ should produce different hashids for two different integers: 403622383 and 211440148
+  ✓ decode should return same integer given output of encode as argument passed to encode: 117881806
+  ✓ decode should return same array of integers given output of encode as argument passed to encode: 403622383,211440148,117881806
+  ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
+  ✓ should return hashid that is equal to [123456] given "LeGxr" as argument
+  ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
+  ✓ should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument
     #getRandomAPIKey()
-      ✓ should return random API key 64 characters long
-      ✓ should return random API key each time called, should not be equal
+  ✓ should return random API key 64 characters long
+  ✓ should return random API key each time called, should not be equal
     #getRandomPassword()
-      ✓ should return random password 16 characters long
-      ✓ should return random password each time called, should not be equal
+  ✓ should return random password 16 characters long
+  ✓ should return random password each time called, should not be equal
     #getEpochStart()
-      ✓ should return set epoch start, for instance #1: 1433116800
-      ✓ should return set epoch start, for instance #2: 1433116800
-      ✓ instance #1 and instance #2 should return same epoch start: 1433116800
+  ✓ should return set epoch start, for instance #1: 1433116800
+  ✓ should return set epoch start, for instance #2: 1433116800
+  ✓ instance #1 and instance #2 should return same epoch start: 1433116800
+  ✓ should reset custom epoch to zero if given one larger than real epoch
+  ✓ should accept custom epoch that is even 1 millisecond in the past
     #getSalt()
-      ✓ should return set salt, for instance #1: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
-      ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
-      ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+  ✓ should return set salt, for instance #1: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+  ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+  ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
     #getShardID()
-      ✓ should return set shard id for instance #1: 123
-      ✓ should return set shard id for instance #2: 12
+  ✓ should return set shard id for instance #1: 123
+  ✓ should return set shard id for instance #2: 12
     #getDUID()
-      ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
-      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
-      ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (67ms)
+  ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
+  ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
+  ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
+  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (123ms)
     #getDUIDInt()
-      ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
-      ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
-      ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (55ms)
+  ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
+  ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
+  ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
+  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (124ms)
     DUID with drifting time
-      ✓ should generate ID with -740 millisecond drift into the past from now( 1436100092801 ), 12512836903743488 should be numerically smaller than 12512836907937792
-
-
-  29 passing (169ms)
+  ✓ should generate ID with 0 millisecond drift into the past from now( 1436177318993 ), 12836747012976640 should be numerically smaller than 12836747017170944
+  ✓ should consistently generate unique IDs even when time is drifting backwards constantly (443ms)
+  32 passing (768ms)
+The command "npm test" exited with 0.
 </pre>
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
