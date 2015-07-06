@@ -258,7 +258,7 @@ And then you should install application with `npm install --save` and start the 
 ### Testing
 `npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
-</code>
+<code>
 > short-duid@1.1.0 test ./short-duid
 > mocha
 
