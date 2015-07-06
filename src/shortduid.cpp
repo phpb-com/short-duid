@@ -19,11 +19,11 @@ namespace shortduid {
   ShortDUID::ShortDUID(uint64_t shard_id, std::string salt, uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
 	time_offset_ = 0;
 	sequence_ = 0ULL;
-	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;                             //If I only did this in the beginning, always initialize your variables!
-  //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
-  if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
-    epoch_start_ = 0ULL;
-    }
+	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;                                 //If I only did this in the beginning, always initialize your variables!
+	//Check to see if custom epoch does not overflow current time and reset it to 0 if it does
+	if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
+		epoch_start_ = 0ULL;
+	  }
   }
 
   ShortDUID::~ShortDUID() {
@@ -109,7 +109,7 @@ namespace shortduid {
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
 	unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
-	cnt = (cnt > 8192) ? 1 : cnt;                                                                                                             //Check boundaries
+	cnt = (cnt > 8192) ? 1 : cnt;                                                                                                                 //Check boundaries
 	v8::Handle<v8::Array> numArr = v8::Array::New( isolate, cnt );
 
 	for(unsigned short i = 0; i < cnt; ++i) {
@@ -128,7 +128,7 @@ namespace shortduid {
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
 	unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
-	cnt = (cnt > 8192) ? 1 : cnt;                                                                                                             //Check boundaries
+	cnt = (cnt > 8192) ? 1 : cnt;                                                                                                                 //Check boundaries
 	v8::Handle<v8::Array> strArr = v8::Array::New( isolate, cnt );
 
 	for(unsigned short i = 0; i < cnt; ++i) {
@@ -207,7 +207,7 @@ namespace shortduid {
 	std::string urlsafe_alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	unsigned short len   = args[0]->IsUndefined() ? 64 : args[0]->Uint32Value();
-	len = (len > 4096) ? 64 : len;                                                                                                             //Check boundaries
+	len = (len > 4096) ? 64 : len;                                                                                                                 //Check boundaries
 
 	std::string ret(ShortDUID::GetRandomString(len, urlsafe_alphabet));
 	args.GetReturnValue().Set(String::NewFromUtf8(isolate, ret.c_str()));
@@ -218,7 +218,7 @@ namespace shortduid {
 	std::string password_alphabet = "!#$%&()=-~^[{]};+:*_?/><0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	unsigned short len   = args[0]->IsUndefined() ? 16 : args[0]->Uint32Value();
-	len = (len > 1024) ? 16 : len;                                                                                                             //Check boundaries
+	len = (len > 1024) ? 16 : len;                                                                                                                 //Check boundaries
 
 	std::string ret(ShortDUID::GetRandomString(len, password_alphabet));
 	args.GetReturnValue().Set(String::NewFromUtf8(isolate, ret.c_str()));
@@ -254,20 +254,20 @@ namespace shortduid {
 
 	//Create submillisecond sequence number
 	uint64_t submilli_sequence = obj->sequence_.fetch_add(1, std::memory_order_seq_cst);
-	submilli_sequence &= ((1ULL << 12) - 1);                                                                                 //Bitmask for the sequence, allows to go up to 4095
+	submilli_sequence &= ((1ULL << 12) - 1);                                                                                     //Bitmask for the sequence, allows to go up to 4095
 
 	{
 	  //Deal with sequence overflow within same time unit, XXX still experimental, need more testing
 	  bool overflow = false;
-	  std::atomic_thread_fence(std::memory_order_seq_cst);                   //Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
+	  std::atomic_thread_fence(std::memory_order_seq_cst);                       //Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
 	  overflow = std::atomic_compare_exchange_strong(&obj->ts_seq_[submilli_sequence], &milliseconds_since_this_epoch_copy, milliseconds_since_this_epoch + 1);
 
 	  if (overflow || milliseconds_since_this_epoch_copy > milliseconds_since_this_epoch) {
-		  milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1;                                                           //Continue drifting time
+		  milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1;                                                                   //Continue drifting time
 		}
 
-	  milliseconds_since_this_epoch &= ((1ULL << 42) - 1);                                                    //We have only 42bit of space, overflow if not fitting
-	  obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch);                             //Store timestamp of last used sequence number
+	  milliseconds_since_this_epoch &= ((1ULL << 42) - 1);                                                        //We have only 42bit of space, overflow if not fitting
+	  obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch);                                 //Store timestamp of last used sequence number
 	}
 
 	return (((uint64_t) milliseconds_since_this_epoch) << 22) |
