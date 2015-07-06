@@ -214,7 +214,7 @@ describe( 'Short DUID', function () {
       }
       merged = merged.concat.apply(merged, duids);
       assert.ok( check_duplicates( merged ), 'resulting array should have no duplicates' );
-      assert.equal(merged.length, 81920, 'returned array of DUIDs should be 81920 IDs long: ' + merged.length);
+      assert.equal(merged.length, 8192 * 10, 'returned array of DUIDs should be 81920 IDs long: ' + merged.length);
     } );
 
   } );
