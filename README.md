@@ -11,12 +11,13 @@ Looking around for what is available, I failed to find anything that would be si
 The id is a 64bit unsigned integer with 42bit used for current timestamp in milliseconds, 10 bit used for shard id, and final 12 bit are used for revolving sequence.
 
 | timestamp_ms | shard_id | sequence |
-|---|---|---|
+|:---:|:---:|:---:|
 | 42bit | 10bit | 12bit |
 
 ## short-duid
 
 ### Changelog
+- 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
 - 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
 - 1.1.0 - Initial public release
 
@@ -263,6 +264,12 @@ app.listen(app.port);
 ```
 
 And then you should install application with `npm install --save` and start the server by `node index.js`. You can check the logs and also list the processes with `./node_modules/.bin/pm2 list`. Getting fresh id can be done by curl: `curl http://localhost:65000/duid/`.
+
+#### More examples
+For more examples please see  `examples` folder, which I plan to keep adding to. You are free to contribute more examples.
+
+### Projects using ShortDUID
+So far I know of none, if you are using it in your project and do not mind sharing this information, please drop me a note at <ian@phpb.com>, and I will add you to this list.
 
 ### Testing
 `npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
