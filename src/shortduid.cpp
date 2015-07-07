@@ -30,7 +30,6 @@ namespace shortduid {
   }
 
   void ShortDUID::Init(Local<Object> exports) {
-	//Isolate* isolate = exports->GetIsolate(); //Only works in iojs case
 	Isolate* isolate = Isolate::GetCurrent();
 
 	// Prepare constructor template
@@ -233,7 +232,7 @@ namespace shortduid {
 	 * 12 bytes for atomic sequence, 2^12 unique numbers per millisecond (4096)
 	 */
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
-	//Get fresh millit time since epoch
+	//Get fresh milli time since epoch
 	uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	//Create milliseconds since custom epoch, we want those numbers short

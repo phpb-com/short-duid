@@ -214,12 +214,12 @@ describe( 'Short DUID', function () {
     var drift = duid_instance3.driftTime( Math.random() * 1000 * 10 * -1 | 0 );
     var id2 = bignum( duid_instance3.getDUIDInt( 4096 )[ 4095 ], 10 ); //Need to rollover sequence
     var curr_ms_time = bignum( duid_instance3.getCurrentTimeMs(), 10 );
-    drift = duid_instance3.driftTime( 0 ); //Reset drift back to 0
 
     it( 'should generate ID with ' + drift + ' millisecond drift into the past from now( ' + curr_ms_time + ' ), ' + id1 + ' should be numerically smaller than ' + id2, function () {
       assert.ok( id2.gt( id1 ), id2 + ' > ' + id1 );
     } );
 
+    drift = duid_instance3.driftTime( 0 ); //Reset drift back to 0
     it( 'should consistently generate unique IDs even when time is drifting backwards constantly', function () {
       var duids = [];
       var merged = [];
