@@ -14,6 +14,10 @@ The id is a 64bit unsigned integer with 42bit used for current timestamp in mill
 
 ## short-duid
 
+### Changelog
+- 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
+- 1.1.0 - Initial public release
+
 ### Requirements
 - gcc 4.7+ with C++11 or clang 3.4+
 - node.js 0.11+ or iojs 2.0.0+
@@ -48,7 +52,7 @@ Instantiates short-duid and sets parameters for the life of instance; returns in
 ###### Parameters
 - `shard_id` - ID of this instance of short-duid, should be unique and not shared with other instances in the cluster; from 0 to 1023
 - `salt` - Salt that is used by hashid encoder/decoder, should be constant and shared across all nodes in the cluster. Do not change this parameter once used in production, or you will have collisions in the alphanumeric IDs. Good way to generate salt on Linux: `dd if=/dev/random bs=1 count=102400 2>/dev/null| sha256sum`
-- `epoch_start` - Number of **seconds** since unix epoch (1970, Jan 1 00:00:00 GMT). This should be some date in the near past and should never be changed further into the future once in production. Example: 1433116800; //Mon, 01 Jun 2015 00:00:00 GMT
+- `epoch_start` - Number of **milliseconds** since unix epoch (1970, Jan 1 00:00:00 GMT). This should be some date in the near past and should never be changed further into the future once in production. Example: 1433116800000; //Mon, 01 Jun 2015 00:00:00 GMT
 
 <hr />
 ##### &lt;short-duid instance&gt;.getDUID(count)
@@ -208,7 +212,7 @@ app.nid = process.env.NODE_APP_INSTANCE ? process.env.NODE_APP_INSTANCE : (proce
 app.shard_id = app.node_id + app.nid;
 app.port = 65000;
 app.salt = "this is my super secret salt";
-app.epoch_start = 1433116800; //Mon, 01 Jun 2015 00:00:00 GMT
+app.epoch_start = 1433116800 * 1000; //Mon, 01 Jun 2015 00:00:00 GMT
 
 //Instantiate short-duid
 var duid_instance = new duid.init(app.shard_id, app.salt, app.epoch_start);

@@ -16,7 +16,7 @@ var check_duplicates = function ( arr ) {
 describe( 'Short DUID', function () {
 
   var init = duid.init;
-  var epoch_start = 1433116800; //Mon, 01 Jun 2015 00:00:00 GMT
+  var epoch_start = 1433116800 * 1000; //Mon, 01 Jun 2015 00:00:00 GMT
   var salt = '39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54'; //dd if=/dev/random bs=1 count=102400 2>/dev/null| sha256sum
 
   var duid_instance1 = new init( 123, salt, epoch_start );

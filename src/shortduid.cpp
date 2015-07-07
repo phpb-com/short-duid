@@ -236,7 +236,7 @@ namespace shortduid {
 	uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	//Create milliseconds since custom epoch, we want those numbers short
-	uint64_t milliseconds_since_this_epoch = milliseconds_since_epoch - (obj->epoch_start_ * 1000) + obj->time_offset_;
+	uint64_t milliseconds_since_this_epoch = milliseconds_since_epoch - (obj->epoch_start_ + obj->time_offset_);
 	uint64_t milliseconds_since_this_epoch_copy(milliseconds_since_this_epoch);
 
 	//Create submillisecond sequence number
