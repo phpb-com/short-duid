@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/phpb-com/short-duid) [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![Code Climate](https://img.shields.io/codeclimate/github/phpb-com/short-duid.svg?style=flat-square)](https://codeclimate.com/github/phpb-com/short-duid) [![Dependency Status](https://david-dm.org/phpb-com/short-duid.svg)](https://david-dm.org/phpb-com/short-duid)
 
+[ ![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
+
 This module was inspired by [icicle](https://github.com/intenthq/icicle) and [snowflake](https://github.com/twitter/snowflake). The ideas is to be able to generate non-colliding, URL friendly, and relatively short IDs that could be used in any application that requires to create URIs for arbitrary resources.
 
 Looking around for what is available, I failed to find anything that would be simple and easy to implement. As a result, this module was born.
