@@ -16,6 +16,51 @@ The id is a 64bit unsigned integer with 42bit used for current timestamp in mill
 
 ## short-duid
 
+Table of Contents
+=================
+
+  * [Short Distributed ID generator module](#short-distributed-id-generator-module)
+    * [short-duid](#short-duid)
+      * [Changelog](#changelog)
+      * [Requirements](#requirements)
+      * [Features](#features)
+      * [Installation](#installation)
+      * [How to use](#how-to-use)
+        * [API](#api)
+          * [short_duid.init(shard_id, salt, epoch_start)](#short_duidinitshard_id-salt-epoch_start)
+            * [Parameters](#parameters)
+          * [(short-duid instance).getDUID(count)](#short-duid-instancegetduidcount)
+            * [Parameters](#parameters-1)
+          * [(short-duid instance).getDUIDInt(count)](#short-duid-instancegetduidintcount)
+            * [Parameters](#parameters-2)
+          * [(short-duid instance).getShardID()](#short-duid-instancegetshardid)
+            * [Parameters](#parameters-3)
+          * [(short-duid instance).getEpochStart()](#short-duid-instancegetepochstart)
+            * [Parameters](#parameters-4)
+          * [(short-duid instance).getSalt()](#short-duid-instancegetsalt)
+            * [Parameters](#parameters-5)
+          * [(short-duid instance).hashidEncode(number_array)](#short-duid-instancehashidencodenumber_array)
+            * [Parameters](#parameters-6)
+          * [(short-duid instance).hashidDecode(hashid_string)](#short-duid-instancehashiddecodehashid_string)
+            * [Parameters](#parameters-7)
+          * [(short-duid instance).getRandomAPIKey(length)](#short-duid-instancegetrandomapikeylength)
+            * [Parameters](#parameters-8)
+          * [(short-duid instance).getRandomPassword(length)](#short-duid-instancegetrandompasswordlength)
+            * [Parameters](#parameters-9)
+        * [Example #1](#example-1)
+        * [Example #2](#example-2)
+          * [package.json](#packagejson)
+          * [index.js](#indexjs)
+          * [api_server.js](#api_serverjs)
+        * [More examples](#more-examples)
+      * [Projects using ShortDUID](#projects-using-shortduid)
+      * [Testing](#testing)
+    * [TODO](#todo)
+    * [Contributing](#contributing)
+    * [License](#license)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
+
 ### Changelog
 - 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
 - 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
@@ -58,63 +103,63 @@ Instantiates short-duid and sets parameters for the life of instance; returns in
 - `epoch_start` - Number of **milliseconds** since unix epoch (1970, Jan 1 00:00:00 GMT). This should be some date in the near past and should never be changed further into the future once in production. Example: 1433116800000; //Mon, 01 Jun 2015 00:00:00 GMT
 
 <hr />
-##### &lt;short-duid instance&gt;.getDUID(count)
+##### (short-duid instance).getDUID(count)
 Returns array of DUIDs in alphanumeric form. Example: `[ "XLz0E3MvkEL" ]`
 
 ###### Parameters
 - `count` - Number of alphanumeric DUIDs to return, from 0 to 8192.
 
 <hr />
-##### &lt;short-duid instance&gt;.getDUIDInt(count)
+##### (short-duid instance).getDUIDInt(count)
 Returns array of DUIDs in numeric form as string. Example: `[ "12534941854212112" ]`
 
 ###### Parameters
 - `count` - Number of numeric DUIDs to return, from 0 to 8192.
 
 <hr />
-##### &lt;short-duid instance&gt;.getShardID()
+##### (short-duid instance).getShardID()
 Returns shard ID of the instance. Example: `0`
 
 ###### Parameters
 - `N/A`
 
 <hr />
-##### &lt;short-duid instance&gt;.getEpochStart()
+##### (short-duid instance).getEpochStart()
 Returns custom epoch of the instance. Example: `0`
 
 ###### Parameters
 - `N/A`
 
 <hr />
-##### &lt;short-duid instance&gt;.getSalt()
+##### (short-duid instance).getSalt()
 Returns salt of the instance. Example: `"this is my salt"`
 
 ###### Parameters
 - `N/A`
 
 <hr />
-##### &lt;short-duid instance&gt;.hashidEncode(number_array)
+##### (short-duid instance).hashidEncode(number_array)
 Returns hashid encoded alphanumeric string, will be dependent on salt. Example: `"3nMMYV0PvMl"`
 
 ###### Parameters
 - `number_array` - Array of unsigned 64bit integers in javascript number or string form.
 
 <hr />
-##### &lt;short-duid instance&gt;.hashidDecode(hashid_string)
+##### (short-duid instance).hashidDecode(hashid_string)
 Returns array of decoded numbers in string form, given hashid as argument; will be dependent on salt. Example: `['1', '2', '3']`
 
 ###### Parameters
 - `hashid_string` - Hashid in a string form. Example: `3nMMYV0PvMl`
 
 <hr />
-##### &lt;short-duid instance&gt;.getRandomAPIKey(length)
+##### (short-duid instance).getRandomAPIKey(length)
 Returns randomly generated string that is suitable for usage in URL and can serve as good static API key. Default returned length is 64 characters, can generate up to 4096 characters of randomness per call. Example: `"JyJ7KqaCBD3nlU6Z0SVafM5MYAXXi29kVdAtaq87PbBFUHnWFBQ0jCdbnOQybNTs"`
 
 ###### Parameters
 - `length` - Length of the random API key to return, default to 64, can be up to 4096.
 
 <hr />
-##### &lt;short-duid instance&gt;.getRandomPassword(length)
+##### (short-duid instance).getRandomPassword(length)
 Returns random string that is suitable for temporary password, not URL safe. Default returned length is 16 characters, can generate up to 1024 random characters per call. Example: `"*)KTRXa>z^zrSgK8"`
 
 ###### Parameters
