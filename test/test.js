@@ -29,23 +29,29 @@ describe( 'Short DUID', function () {
   describe( '#hashidEncode() and #hashidDecode()', function () {
 
     it( 'should produce identical hashids from both instances for: ' + random_integer1, function () {
-      assert.equal( duid_instance1.hashidEncode( [ random_integer1 ] ), duid_instance2.hashidEncode( [ random_integer1 ] ) );
+      test.value( duid_instance1.hashidEncode( [ random_integer1 ] ) )
+          .isIdenticalTo( duid_instance2.hashidEncode( [ random_integer1 ] ) );
     } );
 
     it( 'should produce different hashids for two different integers: ' + random_integer1 + ' and ' + random_integer2, function () {
-      assert.notEqual( duid_instance1.hashidEncode( [ random_integer1 ] ), duid_instance1.hashidEncode( [ random_integer2 ] ) );
+      test.value( duid_instance1.hashidEncode( [ random_integer1 ] ) )
+          .isNotEqualTo( duid_instance1.hashidEncode( [ random_integer2 ] ) );
     } );
 
     it( 'decode should return same integer given output of encode as argument passed to encode: ' + random_integer3, function () {
-      assert.equal( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer3 ] ) )[ 0 ], random_integer3 );
+      test.value( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer3 ] ) )[ 0 ] )
+          .isEqualTo( random_integer3 );
     } );
 
     it( 'decode should return same array of integers given output of encode as argument passed to encode: ' + [ random_integer1, random_integer2, random_integer3 ], function () {
-      assert.deepEqual( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer1, random_integer2, random_integer3 ] ) ), [ random_integer1, random_integer2, random_integer3 ] );
+      test.value( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer1, random_integer2, random_integer3 ] ) ) )
+          .isArray()
+          .is( [ "" + random_integer1, "" + random_integer2, "" + random_integer3 ] );
     } );
 
     it( 'should return hashid that is equal to "LeGxr" given [123456] as argument', function () {
-      assert.equal( 'LeGxr', duid_instance1.hashidEncode( [ 123456 ] ) );
+      test.value( duid_instance1.hashidEncode( [ 123456 ] ) )
+          .is( 'LeGxr' );
     } );
 
     it( 'should return hashid that is equal to [123456] given "LeGxr" as argument', function () {

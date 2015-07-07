@@ -85,9 +85,7 @@ namespace shortduid {
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
 	obj->time_offset_ = args[0]->IsUndefined() ? 0 : args[0]->IntegerValue();
-	std::ostringstream tmp;
-	tmp << obj->time_offset_;
-	std::string offset_str = tmp.str();
+	std::string offset_str(std::to_string(obj->time_offset_));
 
 	args.GetReturnValue().Set(String::NewFromUtf8(isolate, offset_str.c_str()));
   }
@@ -96,9 +94,7 @@ namespace shortduid {
 	Isolate* isolate = args.GetIsolate();
 	uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-	std::ostringstream tmp;
-	tmp << milliseconds_since_epoch;
-	std::string milliseconds_since_epoch_str = tmp.str();
+	std::string milliseconds_since_epoch_str(std::to_string(milliseconds_since_epoch));
 
 	args.GetReturnValue().Set(String::NewFromUtf8(isolate, milliseconds_since_epoch_str.c_str()));
   }
@@ -113,10 +109,7 @@ namespace shortduid {
 	v8::Handle<v8::Array> numArr = v8::Array::New( isolate, cnt );
 
 	for(unsigned short i = 0; i < cnt; ++i) {
-		std::ostringstream tmp;
-		tmp << obj->GetUniqueID(args);
-		std::string strUint64 = tmp.str();
-		numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, strUint64.c_str()) );
+		numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(obj->GetUniqueID(args)).c_str()) );
 	  }
 
 	args.GetReturnValue().Set(numArr);
@@ -132,8 +125,7 @@ namespace shortduid {
 	v8::Handle<v8::Array> strArr = v8::Array::New( isolate, cnt );
 
 	for(unsigned short i = 0; i < cnt; ++i) {
-		std::string _hash(obj->hash.encode({obj->GetUniqueID(args)}));
-		strArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, _hash.c_str()) );
+		strArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, obj->hash.encode({obj->GetUniqueID(args)}).c_str()) );
 	  }
 
 	args.GetReturnValue().Set(strArr);
@@ -148,8 +140,7 @@ namespace shortduid {
 	std::vector<uint64_t> v;
 	for (unsigned int i = 0; i < numArr->Length(); ++i) {
 		String::Utf8Value u_uint64(numArr->Get(i)->ToString());
-		std::string s_uint64(*u_uint64);
-		uint64_t IntVal(strtoull(s_uint64.c_str(), NULL, 10));
+		uint64_t IntVal(std::strtoull(*u_uint64, NULL, 10));
 		v.push_back(IntVal);
 	  }
 
@@ -172,10 +163,7 @@ namespace shortduid {
 
 	v8::Handle<v8::Array> numArr = v8::Array::New( isolate, _uInt64.size() );
 	for(unsigned int i = 0; i < _uInt64.size(); ++i) {
-		std::ostringstream tmp;
-		tmp << _uInt64[i];
-		std::string strUint64 = tmp.str();
-		numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, strUint64.c_str()) );
+		numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(_uInt64[i]).c_str()) );
 	  }
 
 	args.GetReturnValue().Set(numArr);
