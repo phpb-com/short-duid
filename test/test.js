@@ -1,8 +1,8 @@
 var duid = require( '../index' );
-var assert = require( "assert" );
 var test = require( "unit.js" );
 var async = require( "async" );
 var bignum = require( "bignum" );
+var _ = require('lodash');
 
 var check_duplicates = function ( arr ) {
   arr.sort();
@@ -22,9 +22,9 @@ describe( 'Short DUID', function () {
   var duid_instance1 = new init( 123, salt, epoch_start );
   var duid_instance2 = new init( 12, salt, epoch_start );
 
-  var random_integer1 = Math.random() * 1000 * 1000 * 1000 | 0;
-  var random_integer2 = Math.random() * 1000 * 1000 * 1000 | 0;
-  var random_integer3 = Math.random() * 1000 * 1000 * 1000 | 0;
+  var random_integer1 = _.random(1, 1000 * 1000);
+  var random_integer2 = _.random(1, 1000 * 1000);
+  var random_integer3 = _.random(1, 1000 * 1000);
 
   describe( '#hashidEncode() and #hashidDecode()', function () {
 
@@ -44,7 +44,7 @@ describe( 'Short DUID', function () {
     } );
 
     it( 'decode should return same array of integers given output of encode as argument passed to encode: ' + [ random_integer1, random_integer2, random_integer3 ], function () {
-      test.value( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer1, random_integer2, random_integer3 ] ) ) )
+      test.value( duid_instance2.hashidDecode( duid_instance1.hashidEncode( [ random_integer1, "" + random_integer2, random_integer3 ] ) ) )
           .isArray()
           .is( [ "" + random_integer1, "" + random_integer2, "" + random_integer3 ] );
     } );
@@ -54,16 +54,27 @@ describe( 'Short DUID', function () {
           .is( 'LeGxr' );
     } );
 
-    it( 'should return hashid that is equal to [123456] given "LeGxr" as argument', function () {
-      assert.deepEqual( [ 123456 ], duid_instance2.hashidDecode( "LeGxr" ) );
+    it( 'should return hashid that is equal to [ "123456" ] given "LeGxr" as argument', function () {
+      test.value( duid_instance2.hashidDecode( "LeGxr" ) )
+          .is( [ "123456" ] );
     } );
 
     it( 'should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument', function () {
-      assert.equal( 'reG4QhO4NCpm', duid_instance1.hashidEncode( [ 123456, 7890, 123 ] ) );
+      test.value( duid_instance1.hashidEncode( [ "123456", 7890, "123" ] ) )
+          .is( 'reG4QhO4NCpm' );
     } );
 
     it( 'should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument', function () {
-      assert.deepEqual( [ 123456, 7890, 123 ], duid_instance2.hashidDecode( "reG4QhO4NCpm" ) );
+      test.value( duid_instance2.hashidDecode( "reG4QhO4NCpm" ) )
+          .is( [ "123456", "7890", "123" ] );
+    } );
+
+    it( 'should return different hashids given same value and different salt', function () {
+      var duid_tmp1 = new init( 0, "salt#1", 0 );
+      var duid_tmp2 = new init( 0, "salt#2", 0 );
+      test.string( duid_tmp1.hashidEncode( [ 123456 ] ) ).isEqualTo( duid_tmp1.hashidEncode( [ 123456 ] ) );
+      test.string( duid_tmp2.hashidEncode( [ 123456 ] ) ).isEqualTo( duid_tmp2.hashidEncode( [ 123456 ] ) );
+      test.string( duid_tmp1.hashidEncode( [ 123456 ] ) ).isNotEqualTo( duid_tmp2.hashidEncode( [ 123456 ] ) );
     } );
 
   } );
@@ -71,11 +82,20 @@ describe( 'Short DUID', function () {
   describe( '#getRandomAPIKey()', function () {
 
     it( 'should return random API key 64 characters long', function () {
-      assert.equal( duid_instance1.getRandomAPIKey().length, 64 );
+      test.string( duid_instance1.getRandomAPIKey() ).hasLength( 64 );
     } );
 
     it( 'should return random API key each time called, should not be equal', function () {
-      assert.notEqual( duid_instance1.getRandomAPIKey(), duid_instance1.getRandomAPIKey() );
+      test.string( duid_instance1.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance2.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance1.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance2.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance1.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance2.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance1.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance2.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance1.getRandomAPIKey() )
+          .isNotEqualTo( duid_instance2.getRandomAPIKey() );
     } );
 
   } );
@@ -83,11 +103,20 @@ describe( 'Short DUID', function () {
   describe( '#getRandomPassword()', function () {
 
     it( 'should return random password 16 characters long', function () {
-      assert.equal( duid_instance1.getRandomPassword().length, 16 );
+      test.string( duid_instance1.getRandomPassword() ).hasLength( 16 );
     } );
 
     it( 'should return random password each time called, should not be equal', function () {
-      assert.notEqual( duid_instance1.getRandomPassword(), duid_instance1.getRandomPassword() );
+      test.string( duid_instance1.getRandomPassword() )
+          .isNotEqualTo( duid_instance2.getRandomPassword() )
+          .isNotEqualTo( duid_instance1.getRandomPassword() )
+          .isNotEqualTo( duid_instance2.getRandomPassword() )
+          .isNotEqualTo( duid_instance1.getRandomPassword() )
+          .isNotEqualTo( duid_instance2.getRandomPassword() )
+          .isNotEqualTo( duid_instance1.getRandomPassword() )
+          .isNotEqualTo( duid_instance2.getRandomPassword() )
+          .isNotEqualTo( duid_instance1.getRandomPassword() )
+          .isNotEqualTo( duid_instance2.getRandomPassword() );
     } );
 
   } );
@@ -95,28 +124,30 @@ describe( 'Short DUID', function () {
   describe( '#getEpochStart()', function () {
 
     it( 'should return set epoch start, for instance #1: ' + epoch_start, function () {
-      assert.equal( epoch_start, duid_instance1.getEpochStart() );
+      test.value( duid_instance1.getEpochStart() )
+          .isEqualTo( epoch_start );
     } );
 
     it( 'should return set epoch start, for instance #2: ' + epoch_start, function () {
-      assert.equal( epoch_start, duid_instance2.getEpochStart() );
+      test.value( duid_instance2.getEpochStart() )
+          .isEqualTo( epoch_start );
     } );
 
     it( 'instance #1 and instance #2 should return same epoch start: ' + epoch_start, function () {
-      assert.equal( duid_instance1.getEpochStart(), duid_instance2.getEpochStart() );
+      test.value( duid_instance1.getEpochStart() ).isIdenticalTo( duid_instance2.getEpochStart() );
     } );
 
     it( 'should reset custom epoch to zero if given one larger than real epoch', function () {
-      var custom_epoch_overflow = (new Date()).getTime() + (1000 * 1000);
+      var custom_epoch_overflow = (new Date()).getTime() + _.random(2000, 1000 * 1000);
       var duid_instance_overflow = new init( 0, salt, custom_epoch_overflow );
-      assert.equal( duid_instance_overflow.getEpochStart(), 0 );
-      assert.notEqual( duid_instance_overflow.getEpochStart(), custom_epoch_overflow );
+      test.value( duid_instance_overflow.getEpochStart() ).isEqualTo( 0 );
+      test.value( duid_instance_overflow.getEpochStart() ).isNotEqualTo( custom_epoch_overflow );
     } );
 
     it( 'should accept custom epoch that is even 1 millisecond in the past', function () {
-      var custom_epoch_near = (new Date()).getTime() - 1;
+      var custom_epoch_near = (new Date()).getTime() - _.random(1, 2);
       var duid_instance_near = new init( 0, salt, custom_epoch_near );
-      assert.equal( duid_instance_near.getEpochStart(), custom_epoch_near );
+      test.value( duid_instance_near.getEpochStart() ).isEqualTo( custom_epoch_near );
     } );
 
   } );
@@ -124,15 +155,15 @@ describe( 'Short DUID', function () {
   describe( '#getSalt()', function () {
 
     it( 'should return set salt, for instance #1: ' + salt, function () {
-      assert.equal( salt, duid_instance1.getSalt() );
+      test.string( duid_instance1.getSalt() ).isIdenticalTo( salt );
     } );
 
     it( 'should return set salt, for instance #2: ' + salt, function () {
-      assert.equal( salt, duid_instance2.getSalt() );
+      test.string( duid_instance2.getSalt() ).isIdenticalTo( salt );
     } );
 
     it( 'instance #1 and instance #2 should return same salt: ' + salt, function () {
-      assert.equal( duid_instance1.getSalt(), duid_instance2.getSalt() );
+      test.string( duid_instance1.getSalt() ).isIdenticalTo( duid_instance2.getSalt() );
     } );
 
   } );
@@ -140,11 +171,15 @@ describe( 'Short DUID', function () {
   describe( '#getShardID()', function () {
 
     it( 'should return set shard id for instance #1: 123', function () {
-      assert.equal( 123, duid_instance1.getShardID() );
+      test.number( duid_instance1.getShardID() ).is( 123 );
     } );
 
     it( 'should return set shard id for instance #2: 12', function () {
-      assert.equal( 12, duid_instance2.getShardID() );
+      test.number( duid_instance2.getShardID() ).is( 12 );
+    } );
+
+    it( 'should return different shard ids for instance #1 and instance #2', function () {
+      test.number( duid_instance2.getShardID() ).isNot( duid_instance1.getShardID() );
     } );
 
   } );
@@ -154,6 +189,9 @@ describe( 'Short DUID', function () {
       args: 1,
       expected: 1
     }, {
+      args: 0,
+      expected: 0
+    }, {
       args: 8192,
       expected: 8192
     }, {
@@ -161,19 +199,20 @@ describe( 'Short DUID', function () {
       expected: 1
     } ];
 
-    tests.forEach( function ( test ) {
-      it( 'Asked for ' + test.args + ' DUIDs, correctly returns ' + test.expected + ' DUIDs', function () {
-        var res = duid_instance1.getDUID( test.args );
-        assert.equal( res.length, test.expected );
+    tests.forEach( function ( iter ) {
+      it( 'Asked for ' + iter.args + ' DUIDs, correctly returns ' + iter.expected + ' DUIDs', function () {
+        test.array( duid_instance1.getDUID( iter.args ) ).hasLength( iter.expected );
       } );
     } );
 
     it( 'should have no duplicates in the returned arrays, 8192 IDs each, and combined.', function () {
       var res1 = duid_instance1.getDUID( 8192 );
       var res2 = duid_instance2.getDUID( 8192 );
-      assert.ok( check_duplicates( res1 ) );
-      assert.ok( check_duplicates( res2 ) );
-      assert.ok( check_duplicates( res1.concat( res2 ) ) );
+      var res3 = duid_instance1.getDUID( 8192 );
+      test.array( _.uniq( res1 ) ).is( res1 );
+      test.array( _.uniq( res2 ) ).is( res2 );
+      test.array( _.uniq( res3 ) ).is( res3 );
+      test.array( _.uniq( _.flattenDeep( [ res1, res2, res3 ] ) ) ).is( _.flattenDeep( [ res1, res2, res3 ] ) );
     } );
 
   } );
@@ -183,6 +222,9 @@ describe( 'Short DUID', function () {
       args: 1,
       expected: 1
     }, {
+      args: 0,
+      expected: 0
+    }, {
       args: 8192,
       expected: 8192
     }, {
@@ -190,19 +232,20 @@ describe( 'Short DUID', function () {
       expected: 1
     } ];
 
-    tests.forEach( function ( test ) {
-      it( 'Asked for ' + test.args + ' Int DUIDs, correctly returns ' + test.expected + ' Integer DUIDs', function () {
-        var res = duid_instance1.getDUIDInt( test.args );
-        assert.equal( res.length, test.expected );
+    tests.forEach( function ( iter ) {
+      it( 'Asked for ' + iter.args + ' Int DUIDs, correctly returns ' + iter.expected + ' Integer DUIDs', function () {
+        test.array( duid_instance1.getDUID( iter.args ) ).hasLength( iter.expected );
       } );
     } );
 
     it( 'should have no duplicates in the returned arrays, 8192 IDs each, and combined.', function () {
       var res1 = duid_instance1.getDUIDInt( 8192 );
       var res2 = duid_instance2.getDUIDInt( 8192 );
-      assert.ok( check_duplicates( res1 ) );
-      assert.ok( check_duplicates( res2 ) );
-      assert.ok( check_duplicates( res1.concat( res2 ) ) );
+      var res3 = duid_instance1.getDUIDInt( 8192 );
+      test.array( _.uniq( res1 ) ).is( res1 );
+      test.array( _.uniq( res2 ) ).is( res2 );
+      test.array( _.uniq( res3 ) ).is( res3 );
+      test.array( _.uniq( _.flattenDeep( [ res1, res2, res3 ] ) ) ).is( _.flattenDeep( [ res1, res2, res3 ] ) );
     } );
 
   } );
@@ -216,25 +259,24 @@ describe( 'Short DUID', function () {
     var curr_ms_time = bignum( duid_instance3.getCurrentTimeMs(), 10 );
 
     it( 'should generate ID with ' + drift + ' millisecond drift into the past from now( ' + curr_ms_time + ' ), ' + id1 + ' should be numerically smaller than ' + id2, function () {
-      assert.ok( id2.gt( id1 ), id2 + ' > ' + id1 );
+      test.bool( id2.gt( id1 ) ).isTrue();
     } );
 
-    drift = duid_instance3.driftTime( 0 ); //Reset drift back to 0
     it( 'should consistently generate unique IDs even when time is drifting backwards constantly', function () {
+      drift = duid_instance3.driftTime( 0 ); //Reset drift back to 0
       var duids = [];
-      var merged = [];
       for(var i = 0; i < 10; ++i) {
         duid_instance3.driftTime( drift );
         var start = (new Date()).getTime();
         duids[i] = duid_instance3.getDUIDInt( 8192 );
         drift = start - (new Date()).getTime();
-        assert.ok( drift < 0, 'drift should be less than 0: ' + drift );
-
-        assert.equal(duids[i].length, 8192, 'returned array of DUIDs should be 8192 IDs long: ' + duids[i].length);
+        test.number( drift ).isLessThan( 0 );
+        test.array( duids[i] ).hasLength( 8192 );
+        test.array( _.uniq( duids[i] ) ).is( duids[i] );
       }
-      merged = merged.concat.apply(merged, duids);
-      assert.ok( check_duplicates( merged ), 'resulting array should have no duplicates' );
-      assert.equal(merged.length, 8192 * 10, 'returned array of DUIDs should be 81920 IDs long: ' + merged.length);
+      var merged_uniq = _.uniq( _.flattenDeep( duids ) );
+      test.array( merged_uniq ).is( _.flattenDeep( duids ) );
+      test.array( merged_uniq ).hasLength( 8192 * 10 );
     } );
 
   } );
