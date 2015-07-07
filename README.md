@@ -120,7 +120,7 @@ Returns random string that is suitable for temporary password, not URL safe. Def
 <hr />
 #### Example #1
 Simplest example to execute all of the major methods of the module.
-<pre>
+```javascript
 var duid = require('short-duid');
 var duid_instance = duid.init(0, "my salt", 0);
 console.log(duid_instance.getDUID(10));
@@ -129,13 +129,13 @@ console.log(duid_instance.getRandomAPIKey(32));
 console.log(duid_instance.getRandomPassword(8));
 console.log(duid_instance.hashidEncode([1234]));
 console.log(duid_instance.hashidDecode('3nMMYV0PvMl'));
-</pre>
+```
 
 #### Example #2
 More complete example that will create API server with help of koajs and reply to queries.
 
 ##### package.json
-<pre>
+```json
 {
   "name": "ShortDUIDAPIServer",
   "description": "ShortDUID Example API Service",
@@ -151,10 +151,10 @@ More complete example that will create API server with help of koajs and reply t
     "short-duid": "*"
   }
 }
-</pre>
+```
 
 ##### index.js
-<pre>
+```javascript
 'use strict';
 var pm2 = require('pm2');
 
@@ -194,10 +194,10 @@ pm2.connect(function() {
     pm2.disconnect();
   });
 });
-</pre>
+```
 
 ##### api_server.js
-<pre>
+```javascript
 'use strict';
 var koa = require('koa');
 var router = require('koa-router')();
@@ -258,23 +258,23 @@ app
   .use(router.allowedMethods());
 
 app.listen(app.port);
-</pre>
+```
 
 And then you should install application with `npm install --save` and start the server by `node index.js`. You can check the logs and also list the processes with `./node_modules/.bin/pm2 list`. Getting fresh id can be done by curl: `curl http://localhost:65000/duid/`.
 
 ### Testing
 `npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
-<pre>
-2.11s$ npm test
-  short-duid@1.1.7 test /home/travis/build/phpb-com/short-duid
-  ./node_modules/mocha/bin/mocha --reporter spec ./test/
+```
+2.12s$ npm test
+> short-duid@1.2.0 test /home/travis/build/phpb-com/short-duid
+> ./node_modules/mocha/bin/mocha --reporter spec ./test/
   Short DUID
     #hashidEncode() and #hashidDecode()
-  ✓ should produce identical hashids from both instances for: 403622383
-  ✓ should produce different hashids for two different integers: 403622383 and 211440148
-  ✓ decode should return same integer given output of encode as argument passed to encode: 117881806
-  ✓ decode should return same array of integers given output of encode as argument passed to encode: 403622383,211440148,117881806
+  ✓ should produce identical hashids from both instances for: 530166970
+  ✓ should produce different hashids for two different integers: 530166970 and 164008322
+  ✓ decode should return same integer given output of encode as argument passed to encode: 92271089
+  ✓ decode should return same array of integers given output of encode as argument passed to encode: 530166970,164008322,92271089
   ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
   ✓ should return hashid that is equal to [123456] given "LeGxr" as argument
   ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
@@ -286,9 +286,9 @@ And then you should install application with `npm install --save` and start the 
   ✓ should return random password 16 characters long
   ✓ should return random password each time called, should not be equal
     #getEpochStart()
-  ✓ should return set epoch start, for instance #1: 1433116800
-  ✓ should return set epoch start, for instance #2: 1433116800
-  ✓ instance #1 and instance #2 should return same epoch start: 1433116800
+  ✓ should return set epoch start, for instance #1: 1433116800000
+  ✓ should return set epoch start, for instance #2: 1433116800000
+  ✓ instance #1 and instance #2 should return same epoch start: 1433116800000
   ✓ should reset custom epoch to zero if given one larger than real epoch
   ✓ should accept custom epoch that is even 1 millisecond in the past
     #getSalt()
@@ -302,18 +302,18 @@ And then you should install application with `npm install --save` and start the 
   ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
   ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
   ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
-  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (123ms)
+  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (138ms)
     #getDUIDInt()
   ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
   ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
   ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
-  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (124ms)
+  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (109ms)
     DUID with drifting time
-  ✓ should generate ID with 0 millisecond drift into the past from now( 1436177318993 ), 12836747012976640 should be numerically smaller than 12836747017170944
-  ✓ should consistently generate unique IDs even when time is drifting backwards constantly (443ms)
-  32 passing (768ms)
+  ✓ should generate ID with -6713 millisecond drift into the past from now( 1436230534758 ), 13059950129950720 should be numerically smaller than 13059978307284992
+  ✓ should consistently generate unique IDs even when time is drifting backwards constantly (391ms)
+  32 passing (715ms)
 The command "npm test" exited with 0.
-</pre>
+```
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
 - Simplify API further
