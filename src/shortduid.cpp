@@ -16,7 +16,7 @@ namespace shortduid {
 
   Persistent<Function> ShortDUID::constructor;
 
-  ShortDUID::ShortDUID(uint64_t shard_id, std::string salt, uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
+  ShortDUID::ShortDUID(uint32_t shard_id, std::string salt, uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
 	time_offset_ = 0;
 	sequence_ = 0ULL;
 	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;                                 //If I only did this in the beginning, always initialize your variables!
@@ -60,9 +60,15 @@ namespace shortduid {
 	if (args.IsConstructCall()) {
 		std::string salt("");
 		// Invoked as constructor: `new ShortDUID(...)`
-		uint64_t shard_id    = args[0]->IsUndefined() ? 0 : args[0]->IntegerValue();
-		uint64_t epoch_start = args[2]->IsUndefined() ? 0 : args[2]->IntegerValue();
-		if(args[1]->IsString()) {
+		uint32_t shard_id    = std::abs(args[0]->IsUndefined() ? 0 : args[0]->IntegerValue()) & ((1UL << 10) - 1);
+    uint64_t epoch_start = 0;
+
+    if(!args[2]->IsUndefined()) {
+      String::Utf8Value _s_int64(args[2]->ToString());
+      epoch_start = std::strtoll(*_s_int64, NULL, 10);
+      }
+
+		if(!args[1]->IsUndefined()) {
 			String::Utf8Value _salt(args[1]->ToString());
 			salt = *_salt;
 		  }
@@ -83,7 +89,10 @@ namespace shortduid {
 	Isolate* isolate = args.GetIsolate();
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-	obj->time_offset_ = args[0]->IsUndefined() ? 0 : args[0]->IntegerValue();
+  if(!args[0]->IsUndefined()) {
+    obj->time_offset_ = args[0]->IntegerValue();
+    }
+
 	std::string offset_str(std::to_string(obj->time_offset_));
 
 	args.GetReturnValue().Set(String::NewFromUtf8(isolate, offset_str.c_str()));
@@ -179,7 +188,7 @@ namespace shortduid {
 	Isolate* isolate = args.GetIsolate();
 
 	ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
-	args.GetReturnValue().Set(Number::New(isolate, obj->epoch_start_));
+	args.GetReturnValue().Set(String::NewFromUtf8(isolate, std::to_string(obj->epoch_start_).c_str()));
   }
 
   void ShortDUID::GetSalt(const FunctionCallbackInfo<Value>& args) {
@@ -258,7 +267,7 @@ namespace shortduid {
 	}
 
 	return (((uint64_t) milliseconds_since_this_epoch) << 22) |
-	       (((uint64_t) obj->shard_id_ & ((1ULL << 10) - 1)) << 12)  |
+	       (((uint64_t) obj->shard_id_) << 12)  |
 	       ((uint64_t) submilli_sequence);
   }
 

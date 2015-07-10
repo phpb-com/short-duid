@@ -25,7 +25,7 @@ public:
 	static void Init(v8::Local<v8::Object> exports);
 
 private:
-	explicit ShortDUID(uint64_t shard_id = 0, std::string salt = "", uint64_t epoch_start = 0);
+	explicit ShortDUID(uint32_t shard_id = 0, std::string salt = "", uint64_t epoch_start = 0);
 	~ShortDUID();
 
 	static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -52,7 +52,7 @@ private:
 	std::atomic<uint64_t> ts_seq_[4096];
 	std::string salt_;
 	uint64_t epoch_start_;
-	uint64_t shard_id_;
+	uint32_t shard_id_;
 	int64_t time_offset_;     //For testing only
 	hashidsxx::Hashids hash;
   };

@@ -8,7 +8,7 @@ This module was inspired by [icicle](https://github.com/intenthq/icicle) and [sn
 
 Looking around for what is available, I failed to find anything that would be simple and easy to implement. As a result, this module was born.
 
-The id is a 64bit unsigned integer with 42bit used for current timestamp in milliseconds, 10 bit used for shard id, and final 12 bit are used for revolving sequence.
+The id is a 64bit unsigned integer with 42 bits used for current timestamp in milliseconds, 10 bits used for shard id, and final 12 bits are used for revolving sequence.
 
 | timestamp_ms | shard_id | sequence |
 |:---:|:---:|:---:|
@@ -16,52 +16,8 @@ The id is a 64bit unsigned integer with 42bit used for current timestamp in mill
 
 ## short-duid
 
-Table of Contents
-=================
-
-  * [Short Distributed ID generator module](#short-distributed-id-generator-module)
-    * [short-duid](#short-duid)
-      * [Changelog](#changelog)
-      * [Requirements](#requirements)
-      * [Features](#features)
-      * [Installation](#installation)
-      * [How to use](#how-to-use)
-        * [API](#api)
-          * [short_duid.init(shard_id, salt, epoch_start)](#short_duidinitshard_id-salt-epoch_start)
-            * [Parameters](#parameters)
-          * [(short-duid instance).getDUID(count)](#short-duid-instancegetduidcount)
-            * [Parameters](#parameters-1)
-          * [(short-duid instance).getDUIDInt(count)](#short-duid-instancegetduidintcount)
-            * [Parameters](#parameters-2)
-          * [(short-duid instance).getShardID()](#short-duid-instancegetshardid)
-            * [Parameters](#parameters-3)
-          * [(short-duid instance).getEpochStart()](#short-duid-instancegetepochstart)
-            * [Parameters](#parameters-4)
-          * [(short-duid instance).getSalt()](#short-duid-instancegetsalt)
-            * [Parameters](#parameters-5)
-          * [(short-duid instance).hashidEncode(number_array)](#short-duid-instancehashidencodenumber_array)
-            * [Parameters](#parameters-6)
-          * [(short-duid instance).hashidDecode(hashid_string)](#short-duid-instancehashiddecodehashid_string)
-            * [Parameters](#parameters-7)
-          * [(short-duid instance).getRandomAPIKey(length)](#short-duid-instancegetrandomapikeylength)
-            * [Parameters](#parameters-8)
-          * [(short-duid instance).getRandomPassword(length)](#short-duid-instancegetrandompasswordlength)
-            * [Parameters](#parameters-9)
-        * [Example #1](#example-1)
-        * [Example #2](#example-2)
-          * [package.json](#packagejson)
-          * [index.js](#indexjs)
-          * [api_server.js](#api_serverjs)
-        * [More examples](#more-examples)
-      * [Projects using ShortDUID](#projects-using-shortduid)
-      * [Testing](#testing)
-    * [TODO](#todo)
-    * [Contributing](#contributing)
-    * [License](#license)
-
-Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
-
 ### Changelog
+- 1.2.4 - No impact on actual functionality, improved C++ code and updated README with two additional API calls
 - 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
 - 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
 - 1.1.0 - Initial public release
@@ -95,77 +51,141 @@ This module is very simple to use, first you will need to initialize it and then
 #### API
 
 ##### short_duid.init(shard_id, salt, epoch_start)
-Instantiates short-duid and sets parameters for the life of instance; returns instance of the module.
+Instantiates short-duid and sets parameters for the life of instance.
+
+###### Returns
+- Short Distributed ID module instance or `Javascript Object` type
+    - Initializes new instance of the module with the given parameters
 
 ###### Parameters
-- `shard_id` - ID of this instance of short-duid, should be unique and not shared with other instances in the cluster; from 0 to 1023
+- `shard_id` - ID of this instance of short-duid, should be unique and not shared with other instances in the cluster; from 0 to 1023. This parameter will be converted into signed 32 bit integer and masked to fit in 12 bits.
 - `salt` - Salt that is used by hashid encoder/decoder, should be constant and shared across all nodes in the cluster. Do not change this parameter once used in production, or you will have collisions in the alphanumeric IDs. Good way to generate salt on Linux: `dd if=/dev/random bs=1 count=102400 2>/dev/null| sha256sum`
-- `epoch_start` - Number of **milliseconds** since unix epoch (1970, Jan 1 00:00:00 GMT). This should be some date in the near past and should never be changed further into the future once in production. Example: 1433116800000; //Mon, 01 Jun 2015 00:00:00 GMT
+- `epoch_start` - Number of **milliseconds** since unix epoch (1970, Jan 1 00:00:00 GMT). This should be some date in the near past and should never be changed further into the future once in production. Example: 1433116800000; //Mon, 01 Jun 2015 00:00:00 GMT. This parameter will be converted to unsigned 64bit integer.
 
-<hr />
-##### (short-duid instance).getDUID(count)
-Returns array of DUIDs in alphanumeric form. Example: `[ "XLz0E3MvkEL" ]`
+____
+##### _instance_.getDUID(count)
+Method to retrieve array of DUIDs in alphanumeric form. Length of the array is specified by `count` parameter.
+
+###### Returns
+- `Javascript array` object of variable length, depending on `count` parameter.
+    - Example: `[ "XLz0E3MvkEL" ]`
 
 ###### Parameters
 - `count` - Number of alphanumeric DUIDs to return, from 0 to 8192.
 
-<hr />
-##### (short-duid instance).getDUIDInt(count)
-Returns array of DUIDs in numeric form as string. Example: `[ "12534941854212112" ]`
+____
+##### _instance_.getDUIDInt(count)
+Essential same method as `_instance_.getDUID` but insted of hashid converted integer, will return unique ID in a numeric form as string.
+
+###### Returns
+- `Javascript array` object of variable length, depending on `count` parameter.
+    - Example: `[ "12534941854212112" ]`
 
 ###### Parameters
 - `count` - Number of numeric DUIDs to return, from 0 to 8192.
 
-<hr />
-##### (short-duid instance).getShardID()
-Returns shard ID of the instance. Example: `0`
+____
+##### _instance_.getShardID()
+Method to get currently set shard ID of ShortDUID `_instance_`
+
+###### Returns
+- `number` current shard ID of ShortDUID `_instance_`
+    - Example: `0`
 
 ###### Parameters
 - `N/A`
 
-<hr />
-##### (short-duid instance).getEpochStart()
-Returns custom epoch of the instance. Example: `0`
+____
+##### _instance_.getEpochStart()
+Method to get currently set custom epoch starting time in milliseconds of ShortDUID `_instance_`
+
+###### Returns
+- `string` currently set custome epoch of ShortDUID `_instance_`, since it is unsigned 64bit integer, we return it as string.
+    - Example: `"0"`
 
 ###### Parameters
 - `N/A`
 
-<hr />
-##### (short-duid instance).getSalt()
-Returns salt of the instance. Example: `"this is my salt"`
+____
+##### _instance_.getSalt()
+Method to get current salt of ShortDUID `_instance_`. Salt is used to generate alphanumeric DUIDs and also in `hashidEncode`/`hashidDecode` methods.
+
+###### Returns
+- `string` currently set salt that is used in hashid conversion of ShortDUID `_instance_`
+    - Example: `"this is my salt"`
 
 ###### Parameters
 - `N/A`
 
-<hr />
-##### (short-duid instance).hashidEncode(number_array)
-Returns hashid encoded alphanumeric string, will be dependent on salt. Example: `"3nMMYV0PvMl"`
+____
+##### _instance_.hashidEncode(number_array)
+Method to hash(encode) array of unsigned 64bit integers (in `Javascript string` format).
+
+###### Returns
+- `string` hashid of array of unsigned 64bit integers
+    - Example: `"3nMMYV0PvMl"`
 
 ###### Parameters
-- `number_array` - Array of unsigned 64bit integers in javascript number or string form.
+- `number_array` - Array of unsigned 64bit integers in javascript number or string (if does not fit in `Javascript 58bit integer` data type) form.
 
-<hr />
-##### (short-duid instance).hashidDecode(hashid_string)
-Returns array of decoded numbers in string form, given hashid as argument; will be dependent on salt. Example: `['1', '2', '3']`
+____
+##### _instance_.hashidDecode(hashid_string)
+Decode previously encoded array of numbers with hashid method.
+
+###### Returns
+- `Javascript array` array of unsigned 64bit integers in a string form
+    - Example: `['1', '2', '3']`
 
 ###### Parameters
 - `hashid_string` - Hashid in a string form. Example: `3nMMYV0PvMl`
 
-<hr />
-##### (short-duid instance).getRandomAPIKey(length)
-Returns randomly generated string that is suitable for usage in URL and can serve as good static API key. Default returned length is 64 characters, can generate up to 4096 characters of randomness per call. Example: `"JyJ7KqaCBD3nlU6Z0SVafM5MYAXXi29kVdAtaq87PbBFUHnWFBQ0jCdbnOQybNTs"`
+____
+##### _instance_.getRandomAPIKey(length)
+Method to return randomly generated string of URL-friendly characters that is suitable for use as an API key.
+
+###### Returns
+- `string` randomly generated string that is suitable for usage in URL and can serve as good static API key
+    - Example: `"JyJ7KqaCBD3nlU6Z0SVafM5MYAXXi29kVdAtaq87PbBFUHnWFBQ0jCdbnOQybNTs"`
 
 ###### Parameters
-- `length` - Length of the random API key to return, default to 64, can be up to 4096.
+- `length` - Length of the random API key to return, default to 64, can be in the range from 0 to 4096.
 
-<hr />
-##### (short-duid instance).getRandomPassword(length)
-Returns random string that is suitable for temporary password, not URL safe. Default returned length is 16 characters, can generate up to 1024 random characters per call. Example: `"*)KTRXa>z^zrSgK8"`
+____
+##### _instance_.getRandomPassword(length)
+Method to generate and return string of random characters that are **not** URL-friendly and is mostly suitable as a temporary password.
+
+###### Returns
+- `string` randomly generated string that is suitable for usage as a temporary password and is **not** URL-friendly
+    - Example: `"*)KTRXa>z^zrSgK8"`
 
 ###### Parameters
-- `length` - Length of the random password to return, default to 16, can be up to 1024.
+- `length` - Length of the random password to return, default to 16, can be in the range from 0 to 1024.
 
-<hr />
+____
+#### Advanced API
+This API is mainly used by unit tests and should not be required for normal usage of the module. Use it at your own risk.
+
+##### _instance_.getCurrentTimeMs()
+Method to get current time since unix epoch in millisecondsi as seen by the module, not adjusted for custome epoch. This method can be useful in testing and also in capturing _reference_ time to ensure timer stability across restarts. 
+
+###### Returns
+- `string` of numbers, current time since unix epoch in millisecondsi as seen by the module.
+
+###### Parameters
+- `N/A`
+
+____
+##### _instance_.driftTime(milliseconds)
+Method to help simulate `system_clock` drift, can accept positive or negative integers.
+
+###### Returns
+- `string` number of milliseconds to drift ShortDUID's internal clock
+
+###### Parameters
+- `milliseconds` (optional) number of milliseconds to drif system_clock by, can be a positive or negative integer.
+
+
+____
 #### Example #1
 Simplest example to execute all of the major methods of the module.
 ```javascript
@@ -320,53 +340,59 @@ So far I know of none, if you are using it in your project and do not mind shari
 `npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
 ```
-2.12s$ npm test
-> short-duid@1.2.0 test /home/travis/build/phpb-com/short-duid
 > ./node_modules/mocha/bin/mocha --reporter spec ./test/
+
+
+
   Short DUID
     #hashidEncode() and #hashidDecode()
-  ✓ should produce identical hashids from both instances for: 530166970
-  ✓ should produce different hashids for two different integers: 530166970 and 164008322
-  ✓ decode should return same integer given output of encode as argument passed to encode: 92271089
-  ✓ decode should return same array of integers given output of encode as argument passed to encode: 530166970,164008322,92271089
-  ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
-  ✓ should return hashid that is equal to [123456] given "LeGxr" as argument
-  ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
-  ✓ should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument
+      ✓ should produce identical hashids from both instances for: 701098
+      ✓ should produce different hashids for two different integers: 701098 and 851606
+      ✓ decode should return same integer given output of encode as argument passed to encode: 414993
+      ✓ decode should return same array of integers given output of encode as argument passed to encode: 701098,851606,414993
+      ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
+      ✓ should return hashid that is equal to [ "123456" ] given "LeGxr" as argument
+      ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
+      ✓ should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument
+      ✓ should return different hashids given same value and different salt
     #getRandomAPIKey()
-  ✓ should return random API key 64 characters long
-  ✓ should return random API key each time called, should not be equal
+      ✓ should return random API key 64 characters long
+      ✓ should return random API key each time called, should not be equal
     #getRandomPassword()
-  ✓ should return random password 16 characters long
-  ✓ should return random password each time called, should not be equal
+      ✓ should return random password 16 characters long
+      ✓ should return random password each time called, should not be equal
     #getEpochStart()
-  ✓ should return set epoch start, for instance #1: 1433116800000
-  ✓ should return set epoch start, for instance #2: 1433116800000
-  ✓ instance #1 and instance #2 should return same epoch start: 1433116800000
-  ✓ should reset custom epoch to zero if given one larger than real epoch
-  ✓ should accept custom epoch that is even 1 millisecond in the past
+      ✓ should return set epoch start, for instance #1: 1433116800000
+      ✓ should return set epoch start, for instance #2: 1433116800000
+      ✓ instance #1 and instance #2 should return same epoch start: 1433116800000
+      ✓ should reset custom epoch to zero if given one larger than real epoch
+      ✓ should accept custom epoch that is even 1 millisecond in the past
     #getSalt()
-  ✓ should return set salt, for instance #1: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
-  ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
-  ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+      ✓ should return set salt, for instance #1: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+      ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
+      ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
     #getShardID()
-  ✓ should return set shard id for instance #1: 123
-  ✓ should return set shard id for instance #2: 12
+      ✓ should return set shard id for instance #1: 123
+      ✓ should return set shard id for instance #2: 12
+      ✓ should return different shard ids for instance #1 and instance #2
     #getDUID()
-  ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
-  ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
-  ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
-  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (138ms)
+      ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
+      ✓ Asked for 0 DUIDs, correctly returns 0 DUIDs
+      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
+      ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (86ms)
     #getDUIDInt()
-  ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
-  ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
-  ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
-  ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (109ms)
+      ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
+      ✓ Asked for 0 Int DUIDs, correctly returns 0 Integer DUIDs
+      ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
+      ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (52ms)
     DUID with drifting time
-  ✓ should generate ID with -6713 millisecond drift into the past from now( 1436230534758 ), 13059950129950720 should be numerically smaller than 13059978307284992
-  ✓ should consistently generate unique IDs even when time is drifting backwards constantly (391ms)
-  32 passing (715ms)
-The command "npm test" exited with 0.
+      ✓ should generate ID with -2881 millisecond drift into the past from now( 1436495534326 ), 14171438882205696 should be numerically smaller than 14171450982772736
+      ✓ should consistently generate unique IDs even when time is drifting backwards constantly (160ms)
+
+
+  36 passing (372ms)
 ```
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
