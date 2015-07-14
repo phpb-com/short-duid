@@ -1,9 +1,5 @@
 # Short Distributed ID generator module
 
-[![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/phpb-com/short-duid) [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![Code Climate](https://img.shields.io/codeclimate/github/phpb-com/short-duid.svg?style=flat-square)](https://codeclimate.com/github/phpb-com/short-duid) [![Dependency Status](https://david-dm.org/phpb-com/short-duid.svg)](https://david-dm.org/phpb-com/short-duid)
-
-[ ![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
-
 This module was inspired by [icicle](https://github.com/intenthq/icicle) and [snowflake](https://github.com/twitter/snowflake). The ideas is to be able to generate non-colliding, URL friendly, and relatively short IDs that could be used in any application that requires to create URIs for arbitrary resources.
 
 Looking around for what is available, I failed to find anything that would be simple and easy to implement. As a result, this module was born.
@@ -16,6 +12,10 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 
 ## short-duid
 
+[![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/phpb-com/short-duid) [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![Code Climate](https://img.shields.io/codeclimate/github/phpb-com/short-duid.svg?style=flat-square)](https://codeclimate.com/github/phpb-com/short-duid) [![Dependency Status](https://david-dm.org/phpb-com/short-duid.svg)](https://david-dm.org/phpb-com/short-duid)
+
+[ ![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
+
 ### Changelog
 - 1.2.4 - No impact on actual functionality, improved C++ code and updated README with two additional API calls
 - 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
@@ -24,7 +24,7 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 
 ### Requirements
 - gcc 4.7+ with C++11 or clang 3.4+
-- node.js 0.11+ or iojs 2.0.0+
+- node.js 0.11+ or iojs 2+
 - node-gyp
 
 ### Features
@@ -166,10 +166,10 @@ ____
 This API is mainly used by unit tests and should not be required for normal usage of the module. Use it at your own risk.
 
 ##### _instance_.getCurrentTimeMs()
-Method to get current time since unix epoch in millisecondsi as seen by the module, not adjusted for custome epoch. This method can be useful in testing and also in capturing _reference_ time to ensure timer stability across restarts. 
+Method to get current time since unix epoch in milliseconds as seen by the module, not adjusted for custom epoch. This method can be useful in testing and also in capturing _reference_ time to ensure timer stability across restarts.
 
 ###### Returns
-- `string` of numbers, current time since unix epoch in millisecondsi as seen by the module.
+- `string` of numbers, current time since unix epoch in milliseconds as seen by the module.
 
 ###### Parameters
 - `N/A`
