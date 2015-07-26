@@ -337,7 +337,7 @@ For more examples please see  `examples` folder, which I plan to keep adding to.
 So far I know of none, if you are using it in your project and do not mind sharing this information, please drop me a note at <ian@phpb.com>, and I will add you to this list.
 
 ### Testing
-`npm install node-gyp -g && git clone https://github.com/phpb-com/short-duid.git && cd short-duid && npm install --save-dev` <br />
+`npm install node-gyp -g && git clone https://gotfix.com/pixnr/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
 ```
 > ./node_modules/mocha/bin/mocha --reporter spec ./test/
