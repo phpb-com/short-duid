@@ -12,7 +12,10 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 
 ## short-duid
 
-[![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/phpb-com/short-duid) [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid) [![Code Climate](https://img.shields.io/codeclimate/github/phpb-com/short-duid.svg?style=flat-square)](https://codeclimate.com/github/phpb-com/short-duid) [![Dependency Status](https://david-dm.org/phpb-com/short-duid.svg)](https://david-dm.org/phpb-com/short-duid)
+[![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid)
+[![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
+[![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
+[![Dependency Status](https://gemnasium.com/4f0db98c7a23b31f50732ee33bc225ba.svg)](https://gemnasium.com/9d58ca708c17bb90f829a107e5cb5b03)
 
 [ ![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
 
