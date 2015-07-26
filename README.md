@@ -15,7 +15,7 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 [![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid)
 [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
-[![Dependency Status](https://gemnasium.com/4f0db98c7a23b31f50732ee33bc225ba.svg)](https://gemnasium.com/9d58ca708c17bb90f829a107e5cb5b03)
+[![Dependency Status](https://gemnasium.com/7e118352b26fbea978539ea0717fe73b.svg)](https://gemnasium.com/c51a50c5c8eb5fd84b22ba94461dba15)
 
 [ ![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
 
