@@ -2,19 +2,19 @@ iojs:
   image: iojs:latest
   script:
   - node -v
-  - npm install
+  - npm install --unsafe-perm
   - npm test
 
 node11:
   image: node:0.11
   script:
   - node -v
-  - npm install
+  - npm install --unsafe-perm
   - npm test
   
 node12:
   image: node:0.12
   script:
   - node -v
-  - npm install
+  - npm install --unsafe-perm
   - npm test
