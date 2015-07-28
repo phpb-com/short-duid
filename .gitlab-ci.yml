@@ -1,9 +1,3 @@
-plain:
-  script:
-  - node -v
-  - npm --unsafe-perm --registry=http://npm.gotfix.com install
-  - npm test
-
 iojs:
   image: iojs:latest
   script:
