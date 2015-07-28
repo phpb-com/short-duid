@@ -1,5 +1,4 @@
 before_script:
-  - gcc --version
   - export CXX="g++-4.8"
   - npm install --unsafe-perm
 
