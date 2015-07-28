@@ -1,18 +1,17 @@
-image: iojs:latest
-image: node:0.11
-image: node:0.12
-
-before_script:
+iojs:
+  image: iojs:latest
+  script:
   - npm install
-
-Bleeding Edge:
-  script:
   - npm test
 
-Stable Release:
+node11:
+  image: node:0.11
   script:
+  - npm install
   - npm test
-  tags:
-  - release
-  only:
-  - tags
+  
+node12:
+  image: node:0.12
+  script:
+  - npm install
+  - npm test
