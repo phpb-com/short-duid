@@ -1,4 +1,6 @@
-image: iojs:latest, node:0.11, node:0.12
+image: iojs:latest
+image: node:0.11
+image: node:0.12
 
 before_script:
   - npm install
