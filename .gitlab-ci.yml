@@ -1,22 +1,18 @@
-language: node_js
-
-os:
-  - linux
-  - osx
-
-node_js:
-  - "0.12"
-  - "0.11"
-  - "iojs"
-
-compiler:
-  - gcc
-
-before_install:
+before_script:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
-
-install:
   - sudo apt-get install -qq g++-4.8
   - export CXX="g++-4.8"
   - npm install
+
+Bleeding Edge:
+  script:
+  - npm test
+
+Stable Release:
+  script:
+  - npm test
+  tags:
+  - cross
+  only:
+  - tags
