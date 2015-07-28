@@ -1,5 +1,5 @@
 before_script:
-  - apt-get install -qq software-properties-common
+  - apt-get install -qq software-properties-common python-software-properties
   - add-apt-repository ppa:ubuntu-toolchain-r/test
   - apt-get update -qq
   - apt-get install -qq g++-4.8
