@@ -1,7 +1,6 @@
 iojs:
   image: iojs:latest
   script:
-  - id
   - node -v
   - npm install --unsafe-perm
   - npm test
@@ -9,7 +8,6 @@ iojs:
 node11:
   image: node:0.11
   script:
-  - id
   - node -v
   - npm install --unsafe-perm
   - npm test
@@ -17,7 +15,6 @@ node11:
 node12:
   image: node:0.12
   script:
-  - id
   - node -v
   - npm install --unsafe-perm
   - npm test
