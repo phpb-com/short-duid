@@ -1,7 +1,4 @@
 before_script:
-  - apt-get install -qq software-properties-common python-software-properties
-  - add-apt-repository ppa:ubuntu-toolchain-r/test
-  - apt-get update -qq
   - apt-get install -qq g++-4.8
   - export CXX="g++-4.8"
   - npm install --unsafe-perm
@@ -14,6 +11,6 @@ Stable Release:
   script:
   - npm test
   tags:
-  - cross
+  - release
   only:
   - tags
