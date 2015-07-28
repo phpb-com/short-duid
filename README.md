@@ -12,10 +12,9 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 
 ## short-duid
 
-[![Build Status](https://travis-ci.org/phpb-com/short-duid.svg)](https://travis-ci.org/phpb-com/short-duid)
+[![build status](https://ci.gotfix.com/projects/1/status.png?ref=master)](https://ci.gotfix.com/projects/1?ref=master)
 [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
-[![Codeship Status for phpb-com/short-duid](https://codeship.com/projects/f4a57550-05cd-0133-8ce0-3ae97f362442/status?branch=master)](https://codeship.com/projects/89536)
 
 ### Changelog
 - 1.2.4 - No impact on actual functionality, improved C++ code and updated README with two additional API calls
