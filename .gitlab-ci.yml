@@ -3,8 +3,8 @@ iojs:
   script:
   - chown -R nobody .
   - node -v
-  - su -u nobody npm install
-  - su -u nobody npm test
+  - su --preserve-environment -c 'npm install' nobody
+  - su --preserve-environment -c 'npm test' nobody
 
 node11:
   image: node:0.11
