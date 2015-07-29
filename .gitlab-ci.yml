@@ -2,8 +2,6 @@ iojs:
   image: iojs:latest
   script:
   - node -v
-  - pwd
-  - ls -l /
   - npm --unsafe-perm install
   - npm test
 
