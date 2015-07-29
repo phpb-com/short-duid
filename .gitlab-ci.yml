@@ -1,11 +1,10 @@
 iojs:
   image: iojs:latest
   script:
-  - chown -R nobody /builds
-  - su nobody
+  - chown -R nobody .
   - node -v
-  - npm --unsafe-perm install
-  - npm test
+  - su -u nobody npm install
+  - su -u nobody npm test
 
 node11:
   image: node:0.11
