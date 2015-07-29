@@ -1,7 +1,7 @@
 iojs:
   image: iojs:latest
   script:
-  - chown -R nobody:nobody /builds
+  - chown -R nobody /builds
   - su nobody
   - node -v
   - npm --unsafe-perm install
