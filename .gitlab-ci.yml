@@ -1,10 +1,9 @@
 iojs:
   image: iojs:latest
   script:
-  - chown -R nobody .
   - node -v
-  - su --preserve-environment -c 'npm install' nobody
-  - su --preserve-environment -c 'npm test' nobody
+  - npm --unsafe-perm install
+  - npm test
 
 node11:
   image: node:0.11
