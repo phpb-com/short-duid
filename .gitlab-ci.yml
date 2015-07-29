@@ -2,6 +2,7 @@ iojs:
   image: iojs:latest
   script:
   - node -v
+  - cat /etc/passwd
   - npm --unsafe-perm install
   - npm test
 
