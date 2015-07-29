@@ -17,9 +17,9 @@ namespace shortduid {
   Persistent<Function> ShortDUID::constructor;
 
   ShortDUID::ShortDUID(uint32_t shard_id, std::string salt, uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
-	time_offset_ = 0;
+	time_offset_ = 0; //Mainly used in tests, applied to the time before ID is generated
 	sequence_ = 0ULL;
-	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;                                 //If I only did this in the beginning, always initialize your variables!
+	for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0; //This is used to track overflow of sequence per unit of time
 	//Check to see if custom epoch does not overflow current time and reset it to 0 if it does
 	if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
 		epoch_start_ = 0ULL;
@@ -250,20 +250,22 @@ namespace shortduid {
 
 	//Create submillisecond sequence number
 	uint64_t submilli_sequence = obj->sequence_.fetch_add(1, std::memory_order_seq_cst);
-	submilli_sequence &= ((1ULL << 12) - 1);                                                                                     //Bitmask for the sequence, allows to go up to 4095
+	submilli_sequence &= ((1ULL << 12) - 1); //Bitmask for the sequence, allows to go up to 4095
 
 	{
 	  //Deal with sequence overflow within same time unit, XXX still experimental, need more testing
+    //Also, since iojs/nodejs are single-threaded, this "atomic" code is perhapse redundant. Maybe in the future this can be made
+    //multithreaded, if it will give speed advantages, doubt it will. It was fun to write though ...
 	  bool overflow = false;
-	  std::atomic_thread_fence(std::memory_order_seq_cst);                       //Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
+	  std::atomic_thread_fence(std::memory_order_seq_cst); //Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
 	  overflow = std::atomic_compare_exchange_strong(&obj->ts_seq_[submilli_sequence], &milliseconds_since_this_epoch_copy, milliseconds_since_this_epoch + 1);
 
 	  if (overflow || milliseconds_since_this_epoch_copy > milliseconds_since_this_epoch) {
-		  milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1;                                                                   //Continue drifting time
+		  milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1; //Continue drifting time
 		}
 
-	  milliseconds_since_this_epoch &= ((1ULL << 42) - 1);                                                        //We have only 42bit of space, overflow if not fitting
-	  obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch);                                 //Store timestamp of last used sequence number
+	  milliseconds_since_this_epoch &= ((1ULL << 42) - 1); //We have only 42bit of space, overflow if not fitting
+	  obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch); //Store timestamp of last used sequence number
 	}
 
 	return (((uint64_t) milliseconds_since_this_epoch) << 22) |

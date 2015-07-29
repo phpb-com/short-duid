@@ -288,34 +288,27 @@ var duid_instance = new duid.init(app.shard_id, app.salt, app.epoch_start);
 //Setup routes
 router
   .get('/', function*(next) {
-    this.body = ({
+    this.body = {
       name: 'ShortDUID API'
-    });
-    yield next;
+    };
   })
   .get('/random_api_key/:length?', function*(next) {
     this.body = yield([duid_instance.getRandomAPIKey((this.params.length ? this.params.length : 64))]);
-    yield next;
   })
   .get('/random_password/:length?', function*(next) {
     this.body = yield([duid_instance.getRandomPassword((this.params.length ? this.params.length : 16))]);
-    yield next;
   })
   .get('/hashid_decode/:id', function*(next) {
     this.body = yield(duid_instance.hashidDecode(this.params.id));
-    yield next;
   })
   .get('/hashid_encode/:id+', function*(next) {
     this.body = yield([duid_instance.hashidEncode(this.params.id.split('/'))]);
-    yield next;
   })
   .get('/nduid/:count?', function*(next) {
     this.body = yield(duid_instance.getDUIDInt((this.params.count ? this.params.count : 1)));
-    yield next;
   })
   .get('/duid/:count?', function*(next) {
     this.body = yield(duid_instance.getDUID((this.params.count ? this.params.count : 1)));
-    yield next;
   });
 
 //Setup middleware
