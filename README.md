@@ -19,7 +19,7 @@ Official repository is at <http://gotfix.com/pixnr/short-duid> and mirror is at 
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 
 ### Changelog
-- 1.3.0 - No impact on actual functionality, use steady_clock vs system_clock, cleanup, native code improvements, added one more test, example code improvements
+- 1.3.1 - No impact on actual functionality, use steady_clock vs system_clock, cleanup, native code improvements, added one more test, example code improvements
 - 1.2.4 - No impact on actual functionality, improved C++ code and updated README with two additional API calls
 - 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
 - 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
