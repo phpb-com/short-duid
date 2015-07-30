@@ -107,7 +107,9 @@ namespace shortduid {
 
   void ShortDUID::GetCurrentTimeMs(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
-    uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+
+    uint64_t milliseconds_since_epoch = obj->mono_epoch_diff_ + (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 
     std::string milliseconds_since_epoch_str(std::to_string(milliseconds_since_epoch));
 
