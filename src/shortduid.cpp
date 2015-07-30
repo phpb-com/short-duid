@@ -16,10 +16,11 @@ namespace shortduid {
 
   Persistent<Function> ShortDUID::constructor;
 
-  ShortDUID::ShortDUID(uint32_t shard_id, std::string salt, uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
-    time_offset_ = 0;     //Mainly used in tests, applied to the time before ID is generated
-    sequence_ = 0ULL;
-    for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0;     //This is used to track overflow of sequence per unit of time
+  ShortDUID::ShortDUID(const uint32_t shard_id, const std::string salt, const uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
+    time_offset_ = 0; // Mainly used in tests, applied to the time before ID is generated
+    sequence_ = 0ULL; // Sub-millisecond sequence
+    shard_id_ &= ((1ULL << 10) - 1); //Ensure that shard_id is no larger than 10 bits integer
+    for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0ULL; //This is used to track overflow of sequence per unit of time
     //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
     if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
       epoch_start_ = 0ULL;
@@ -108,12 +109,12 @@ namespace shortduid {
   }
 
   void ShortDUID::GetDUIDInt(const FunctionCallbackInfo<Value>& args) {
-    //Method to return unique uint64 integers in a string form, wrapped in JS array
+    // Method to return unique uint64 integers in a string form, wrapped in JS array
     Isolate* isolate = args.GetIsolate();
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
-    cnt = (cnt > 8192) ? 1 : cnt; //Check boundaries
+    cnt = (cnt > 8192) ? 1 : cnt; // Check boundaries
     v8::Handle<v8::Array> numArr = v8::Array::New( isolate, cnt );
 
     for(unsigned short i = 0; i < cnt; ++i) {
@@ -124,12 +125,12 @@ namespace shortduid {
   }
 
   void ShortDUID::GetDUID(const FunctionCallbackInfo<Value>& args) {
-    //Method to return unique hashed IDs in a string form, wrapped in JS array
+    // Method to return unique hashed IDs in a string form, wrapped in JS array
     Isolate* isolate = args.GetIsolate();
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
-    cnt = (cnt > 8192) ? 1 : cnt; //Check boundaries
+    cnt = (cnt > 8192) ? 1 : cnt; // Check boundaries
     v8::Handle<v8::Array> strArr = v8::Array::New( isolate, cnt );
 
     for(unsigned short i = 0; i < cnt; ++i) {
@@ -146,6 +147,7 @@ namespace shortduid {
 
     v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
     std::vector<uint64_t> v;
+    v.reserve(numArr->Length());
     for (unsigned int i = 0; i < numArr->Length(); ++i) {
       String::Utf8Value u_uint64(numArr->Get(i)->ToString());
       uint64_t IntVal(std::strtoull(*u_uint64, NULL, 10));
@@ -161,17 +163,16 @@ namespace shortduid {
 
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    std::vector<uint64_t> _uInt64 = {};
-
+    std::vector<uint64_t> uInt64_;
     if(args[0]->IsString()) {
-      String::Utf8Value _hash(args[0]->ToString());
-      std::string hash(*_hash);
-      _uInt64 = obj->hash.decode(hash);
+      String::Utf8Value hash_(args[0]->ToString());
+      std::string hash(*hash_);
+      uInt64_ = obj->hash.decode(hash);
     }
 
-    v8::Handle<v8::Array> numArr = v8::Array::New( isolate, _uInt64.size() );
-    for(unsigned int i = 0; i < _uInt64.size(); ++i) {
-      numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(_uInt64[i]).c_str()) );
+    v8::Handle<v8::Array> numArr = v8::Array::New( isolate, uInt64_.size() );
+    for(unsigned int i = 0; i < uInt64_.size(); ++i) {
+      numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(uInt64_[i]).c_str()) );
     }
 
     args.GetReturnValue().Set(numArr);
@@ -225,52 +226,54 @@ namespace shortduid {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dis(0, alphabet.length() - 1);
 
-    std::vector<char> v;
+    std::string output;
+    output.reserve(len);
     for(int i = 0; i < len; i++) {
-      v.push_back(alphabet[dis(gen)]);
+      output.push_back(alphabet[dis(gen)]);
     }
 
-    std::string ret(v.begin(), v.end());
-    return ret;
+    return output;
   }
 
   uint64_t ShortDUID::GetUniqueID(const v8::FunctionCallbackInfo<v8::Value>& args) {
-    /* Generate distributed-safe unique ID based on milliseconds timestanp, sequence, and shard id
-    * 42bits (not bytes) are for milliseconds, should fit 139 years of milliseconds
-    * 10 bytes for shard ID, 2^10 shards (1024)
-    * 12 bytes for atomic sequence, 2^12 unique numbers per millisecond (4096)
-    */
+    // Generate distributed-safe unique ID based on milliseconds timestanp, sequence, and shard id
+    // 42bits (not bytes) are for milliseconds, should fit 139 years of milliseconds
+    // 10 bytes for shard ID, 2^10 shards (1024)
+    // 12 bytes for atomic sequence, 2^12 unique numbers per millisecond (4096)
+
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
-    //Get fresh milli time since epoch
+ 
+    // Get fresh milli time since epoch
     uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    //Create milliseconds since custom epoch, we want those numbers short
+    // Create milliseconds since custom epoch, we want those numbers short
     uint64_t milliseconds_since_this_epoch = milliseconds_since_epoch - (obj->epoch_start_ + obj->time_offset_);
     uint64_t milliseconds_since_this_epoch_copy(milliseconds_since_this_epoch);
 
-    //Create submillisecond sequence number
+    // Create submillisecond sequence number
     uint64_t submilli_sequence = obj->sequence_.fetch_add(1, std::memory_order_seq_cst);
-    submilli_sequence &= ((1ULL << 12) - 1);     //Bitmask for the sequence, allows to go up to 4095
+    submilli_sequence &= ((1ULL << 12) - 1); // Bitmask for the sequence, allows to go up to 4095
 
     {
-      //Deal with sequence overflow within same time unit, XXX still experimental, need more testing
-      //Also, since iojs/nodejs are single-threaded, this "atomic" code is perhapse redundant. Maybe in the future this can be made
-      //multithreaded, if it will give speed advantages, doubt it will. It was fun to write though ...
+      // Deal with sequence overflow within same time unit, XXX still experimental, need more testing
+      // Also, since iojs/nodejs are single-threaded, this "atomic" code is perhapse redundant. Maybe in the future this can be made
+      // multithreaded, if it will give speed advantages, doubt it will. It was fun to write though ...
       bool overflow = false;
-      std::atomic_thread_fence(std::memory_order_seq_cst);     //Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
+      std::atomic_thread_fence(std::memory_order_seq_cst); // Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
       overflow = std::atomic_compare_exchange_strong(&obj->ts_seq_[submilli_sequence], &milliseconds_since_this_epoch_copy, milliseconds_since_this_epoch + 1);
 
       if (overflow || milliseconds_since_this_epoch_copy > milliseconds_since_this_epoch) {
-        milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1;         //Continue drifting time
+        milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1; // Continue drifting time
       }
 
-      milliseconds_since_this_epoch &= ((1ULL << 42) - 1);     //We have only 42bit of space, overflow if not fitting
-      obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch);     //Store timestamp of last used sequence number
+      milliseconds_since_this_epoch &= ((1ULL << 42) - 1); // We have only 42bit of space, overflow if not fitting
+      obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch); // Store timestamp of last used sequence number
     }
 
-    return (((uint64_t) milliseconds_since_this_epoch) << 22) |
-           (((uint64_t) obj->shard_id_) << 12)  |
-           ((uint64_t) submilli_sequence);
+    // Pack ID and return
+    return ((milliseconds_since_this_epoch) << 22) |
+           ((obj->shard_id_) << 12)  |
+           submilli_sequence;
   }
 
 }  // namespace shortduid
