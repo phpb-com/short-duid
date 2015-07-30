@@ -7,7 +7,7 @@ namespace shortduid {
   using v8::Object;
 
   void InitAll(Local<Object> exports) {
-	ShortDUID::Init(exports);
+    ShortDUID::Init(exports);
   }
 
   NODE_MODULE(addon, InitAll)
