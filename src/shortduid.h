@@ -51,6 +51,8 @@ namespace shortduid {
     std::atomic_ullong sequence_;
     std::atomic<uint64_t> ts_seq_[4096];
     std::string salt_;
+    uint64_t system_time_at_start_;
+    uint64_t mono_epoch_diff_;
     uint64_t epoch_start_;
     uint32_t shard_id_;
     int64_t time_offset_;         //For testing only

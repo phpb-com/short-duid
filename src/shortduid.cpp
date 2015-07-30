@@ -19,10 +19,16 @@ namespace shortduid {
   ShortDUID::ShortDUID(const uint32_t shard_id, const std::string salt, const uint64_t epoch_start) : salt_(salt), epoch_start_(epoch_start), shard_id_(shard_id), hash(salt, 0, DEFAULT_ALPHABET) {
     time_offset_ = 0; // Mainly used in tests, applied to the time before ID is generated
     sequence_ = 0ULL; // Sub-millisecond sequence
+
+    //Setup time related variables
+    auto mono_time = (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+    system_time_at_start_ = (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    mono_epoch_diff_ = system_time_at_start_ - mono_time;
+
     shard_id_ &= ((1ULL << 10) - 1); //Ensure that shard_id is no larger than 10 bits integer
     for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0ULL; //This is used to track overflow of sequence per unit of time
     //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
-    if(epoch_start_ > (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {
+    if(epoch_start_ > system_time_at_start_) {
       epoch_start_ = 0ULL;
     }
   }
@@ -243,8 +249,8 @@ namespace shortduid {
 
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
  
-    // Get fresh milli time since epoch
-    uint64_t milliseconds_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    // Get fresh milli time since epoch from monotonic clock
+    uint64_t milliseconds_since_epoch = obj->mono_epoch_diff_ + (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 
     // Create milliseconds since custom epoch, we want those numbers short
     uint64_t milliseconds_since_this_epoch = milliseconds_since_epoch - (obj->epoch_start_ + obj->time_offset_);
