@@ -220,7 +220,7 @@ namespace shortduid {
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, ret.c_str()));
   }
 
-  std::string ShortDUID::GetRandomString(unsigned short len, std::string &alphabet) {
+  std::string ShortDUID::GetRandomString(unsigned short len, const std::string &alphabet) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dis(0, alphabet.length() - 1);

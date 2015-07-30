@@ -46,7 +46,7 @@ namespace shortduid {
     //JS stuff
     static v8::Persistent<v8::Function> constructor;
     //Non JS methods
-    static std::string GetRandomString(unsigned short len, std::string &alphabet);
+    static std::string GetRandomString(unsigned short len, const std::string &alphabet);
     uint64_t GetUniqueID(const v8::FunctionCallbackInfo<v8::Value>& args);
     std::atomic_ullong sequence_;
     std::atomic<uint64_t> ts_seq_[4096];
