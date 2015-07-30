@@ -1,4 +1,4 @@
-= Examples of short-duid usage
+## Examples of short-duid usage
 
 * [API Server](examples/API_Server)
-    * run 'npm install && npm start' to start it
+    * run `npm install && npm start` to start it
