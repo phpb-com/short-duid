@@ -79,7 +79,8 @@ namespace hashidsxx {
 
   std::string &Hashids::_reorder(std::string &input,
                                  const std::string &salt) const {
-	//Borrowed from one of the hashids C implementations
+	// Borrowed from one of the hashids C implementations,
+  // magnitudes faster than original string concatination based shuffle
 	int i, j, v, p, temp;
 
 	if (salt.empty())

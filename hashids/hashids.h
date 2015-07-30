@@ -17,9 +17,9 @@
 #include <stdexcept>
 #include <cmath>
 
-// For C++11 we would use cstdint here instead of stdint.h but we want to be able
+// For C++11 we use cstdint here, use stdint.h if you want to be able
 // to link to this file with non C++11 as well
-#include <stdint.h>
+#include <cstdint>
 
 #define DEFAULT_ALPHABET                                                       \
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
