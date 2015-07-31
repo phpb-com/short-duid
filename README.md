@@ -12,18 +12,24 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 
 ## short-duid
 
-Official repository is at <http://gotfix.com/pixnr/short-duid> and mirror is at <https://github.com/phpb-com/short-duid>
+Official repository is at <https://gotfix.com/pixnr/short-duid> and mirror is at <https://github.com/phpb-com/short-duid>
+There is also a sister project to write this exact module in pure JavaScript: <https://gotfix.com/pixnr/short-duid-js>
 
 [![build status](https://ci.gotfix.com/projects/1/status.png?ref=master)](https://ci.gotfix.com/projects/1?ref=master)
 [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 
 ### Changelog
-- 1.3.2 - No impact on actual functionality, use steady_clock vs system_clock, cleanup, native code improvements, added one more test, example code improvements
-- 1.2.4 - No impact on actual functionality, improved C++ code and updated README with two additional API calls
-- 1.2.2 - No impact on actual functionality, added examples and reworked unit tests
-- 1.2.0 - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
-- 1.1.0 - Initial public release
+- 1.3.2
+  - No impact on actual functionality, use steady_clock vs system_clock, cleanup, native code improvements, added one more test, example code improvements
+- 1.2.4
+  - No impact on actual functionality, improved C++ code and updated README with two additional API calls
+- 1.2.2
+  - No impact on actual functionality, added examples and reworked unit tests
+- 1.2.0
+  - A lot of fixes and test additions, also API breaking change: custom_epoch is expecting **milliseconds** instead of seconds
+- 1.1.0
+  - Initial public release
 
 ### Requirements
 - gcc 4.7+ with C++11 or clang 3.4+
