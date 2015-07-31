@@ -13,6 +13,7 @@ The id is a 64bit unsigned integer with 42 bits used for current timestamp in mi
 ## short-duid
 
 Official repository is at <https://gotfix.com/pixnr/short-duid> and mirror is at <https://github.com/phpb-com/short-duid>
+
 There is also a sister project to write this exact module in pure JavaScript: <https://gotfix.com/pixnr/short-duid-js>
 
 [![build status](https://ci.gotfix.com/projects/1/status.png?ref=master)](https://ci.gotfix.com/projects/1?ref=master)
