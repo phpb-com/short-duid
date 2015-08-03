@@ -339,9 +339,12 @@ For more examples please see  `examples` folder, which I plan to keep adding to.
 ### Projects using ShortDUID
 So far I know of none, if you are using it in your project and do not mind sharing this information, please drop me a note at <ian@phpb.com>, and I will add you to this list.
 
-### Testing
+### Testing and benchmarking
 `npm install node-gyp -g && git clone https://gotfix.com/pixnr/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
+
+_To run only benchmark, execute `npm run-script bench` after installation._
+
 ```
 $ npm test
 npm info it worked if it ends with ok

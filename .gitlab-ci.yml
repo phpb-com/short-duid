@@ -4,6 +4,7 @@ iojs:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
 
 node11:
@@ -12,6 +13,7 @@ node11:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
   
 node12:
@@ -20,4 +22,5 @@ node12:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
