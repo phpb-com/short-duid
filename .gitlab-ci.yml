@@ -4,6 +4,7 @@ iojs:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - npm run-script bench
 
 node11:
   image: node:0.11
@@ -11,6 +12,7 @@ node11:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - npm run-script bench
   
 node12:
   image: node:0.12
@@ -18,3 +20,4 @@ node12:
   - node -v
   - npm --unsafe-perm --registry https://npm.gotfix.com install
   - npm test
+  - npm run-script bench
