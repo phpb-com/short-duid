@@ -343,16 +343,24 @@ So far I know of none, if you are using it in your project and do not mind shari
 `npm install node-gyp -g && git clone https://gotfix.com/pixnr/short-duid.git && cd short-duid && npm install --save-dev` <br />
 `npm test`
 ```
+$ npm test
+npm info it worked if it ends with ok
+npm info using npm@2.13.0
+npm info using node@v2.4.0
+npm info pretest short-duid@1.3.2
+npm info test short-duid@1.3.2
+
+> short-duid@1.3.2 test /builds/pixnr/short-duid
 > ./node_modules/mocha/bin/mocha --reporter spec ./test/
 
 
 
   Short DUID
     #hashidEncode() and #hashidDecode()
-      ✓ should produce identical hashids from both instances for: 701098
-      ✓ should produce different hashids for two different integers: 701098 and 851606
-      ✓ decode should return same integer given output of encode as argument passed to encode: 414993
-      ✓ decode should return same array of integers given output of encode as argument passed to encode: 701098,851606,414993
+      ✓ should produce identical hashids from both instances for: 782313
+      ✓ should produce different hashids for two different integers: 782313 and 63616
+      ✓ decode should return same integer given output of encode as argument passed to encode: 173705
+      ✓ decode should return same array of integers given output of encode as argument passed to encode: 782313,63616,173705
       ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
       ✓ should return hashid that is equal to [ "123456" ] given "LeGxr" as argument
       ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
@@ -375,27 +383,53 @@ So far I know of none, if you are using it in your project and do not mind shari
       ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
       ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
     #getShardID()
+      ✓ should overflow if shard_id is set to integer that does not fit in 10 bits: 1024 --> 0
       ✓ should return set shard id for instance #1: 123
       ✓ should return set shard id for instance #2: 12
       ✓ should return different shard ids for instance #1 and instance #2
     #getDUID()
       ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
       ✓ Asked for 0 DUIDs, correctly returns 0 DUIDs
-      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
+      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs (38ms)
       ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (86ms)
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (109ms)
     #getDUIDInt()
       ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
       ✓ Asked for 0 Int DUIDs, correctly returns 0 Integer DUIDs
       ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
       ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (52ms)
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (47ms)
     DUID with drifting time
-      ✓ should generate ID with -2881 millisecond drift into the past from now( 1436495534326 ), 14171438882205696 should be numerically smaller than 14171450982772736
-      ✓ should consistently generate unique IDs even when time is drifting backwards constantly (160ms)
+      ✓ should generate ID with -6625 millisecond drift into the past from now( 1438584385169 ), 22932714328403968 should be numerically smaller than 22932742132445184
+      ✓ should consistently generate unique IDs even when time is drifting backwards constantly (140ms)
 
 
-  36 passing (372ms)
+  37 passing (420ms)
+
+npm info posttest short-duid@1.3.2
+npm info ok 
+$ npm run-script bench
+npm info it worked if it ends with ok
+npm info using npm@2.13.0
+npm info using node@v2.4.0
+npm info prebench short-duid@1.3.2
+npm info bench short-duid@1.3.2
+
+> short-duid@1.3.2 bench /builds/pixnr/short-duid
+> /usr/bin/env node benchmarks/test.js
+
+single DUIDInt generation x 1,126,104 ops/sec ±3.09% (85 runs sampled)
+batch of 10 DUIDInt generation x 140,142 ops/sec ±1.52% (82 runs sampled)
+single DUID generation x 359,803 ops/sec ±2.35% (91 runs sampled)
+batch of 10 DUID generation x 26,208 ops/sec ±8.24% (61 runs sampled)
+single DUID generation (1 character salt) x 202,120 ops/sec ±2.02% (75 runs sampled)
+batch of 10 DUID generation (1 character salt) x 22,406 ops/sec ±1.64% (87 runs sampled)
+singe getRandomAPIKey generation x 87,828 ops/sec ±1.80% (82 runs sampled)
+single getRandomPassword generation x 115,183 ops/sec ±1.64% (91 runs sampled)
+npm info postbench short-duid@1.3.2
+npm info ok 
+
+Build succeeded.
 ```
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
