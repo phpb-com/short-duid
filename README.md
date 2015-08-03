@@ -132,7 +132,7 @@ ____
 Method to hash(encode) array of unsigned 64bit integers (in `Javascript string` format).
 
 ###### Returns
-- `string` hashid of array of unsigned 64bit integers
+- `string` hashid array of unsigned 64bit integers
     - Example: `"3nMMYV0PvMl"`
 
 ###### Parameters
