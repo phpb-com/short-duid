@@ -52,6 +52,10 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 - (Convenient Add-on) Random URL-safe API key generator
 - Simple to use
 
+### Performance
+- Using single core of baremetal `Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz` (as of 2015 Aug 3) I was able to perform **1,126,104 ops/sec**, generating integer IDs
+- You can perfrom benchmark tests on your H/W by running `git clone https://gotfix.com/pixnr/short-duid.git` and `cd short-duid && npm install && npm run-script bench`
+
 ### Installation
 `npm install node-gyp -g && npm install short-duid`
 
