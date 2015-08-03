@@ -21,6 +21,8 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 
 ### Changelog
+- 1.3.3
+  - No API changes. Added benchmarking code and made it run as part of CI. Minor improvements to README.md file.
 - 1.3.2
   - No impact on actual functionality, use steady_clock vs system_clock, cleanup, native code improvements, added one more test, example code improvements
 - 1.2.4
