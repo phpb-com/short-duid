@@ -17,7 +17,7 @@
     "bindings": "^1.2.1"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter spec ./test/",
+    "test": "./node_modules/mocha/bin/mocha --reporter spec ./test/*.js",
     "bench": "/usr/bin/env node benchmarks/test.js",
     "install": "node-gyp configure rebuild"
   },
