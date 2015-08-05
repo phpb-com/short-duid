@@ -1,6 +1,7 @@
 before_script:
   - node -v
-  - npm --registry https://npm.gotfix.com install
+  - npm config set registry https://npm.gotfix.com
+  - npm install
 
 types:
   - build
