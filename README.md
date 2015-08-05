@@ -36,7 +36,7 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 
 ### Requirements
 - gcc 4.7+ with C++11 or clang 3.4+
-- node.js 0.11+ or iojs 2+
+- node.js 0.12+ or iojs 2+/3+
 - node-gyp
 
 ### Features

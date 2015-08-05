@@ -8,11 +8,18 @@ types:
   - test
   - deploy
 
-iojs:
+iojs-2:
+  type: test
+  image: gotfix/iojs:2
+  script:
+  - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
+  - npm run-script bench
+
+iojs-latest:
   type: test
   image: gotfix/iojs:latest
   script:
-  - id
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -21,7 +28,6 @@ node12:
   type: test
   image: gotfix/node:0.12
   script:
-  - id
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
