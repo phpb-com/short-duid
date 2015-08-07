@@ -1,6 +1,8 @@
 before_script:
   - node -v
   - npm config set registry https://npm.gotfix.com
+  - npm config set spin false
+  - npm config set loglevel http
 
 types:
   - test
