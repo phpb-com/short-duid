@@ -4,9 +4,9 @@ before_script:
   - npm install
 
 types:
-  - build
   - test
-  - deploy
+  - mirror
+  - release
 
 iojs-2:
   type: test
@@ -39,3 +39,22 @@ node12:
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
+
+github_mirror:
+  type: mirror
+  image: gotfix/iojs:latest
+  script:
+  - mkdir -p ${WORK_DIR}/mirror && cd ${WORK_DIR}/mirror
+  - git clone -q --mirror https://gotfix.com/pixnr/short-duid.git 
+  - cd short-duid.git
+  - git push -q --mirror https://phpb-com:${GITHUB_TOKEN}@github.com/phpb-com/short-duid.git
+
+release:
+  type: release
+  image: gotfix/iojs:latest
+  script:
+  - npm config set registry https://registry.npmjs.com
+  - echo ${NPM_TOKEN} >> ~/.npmrc
+  - npm publish
+  only:
+  - tags
