@@ -1,7 +1,6 @@
 before_script:
   - node -v
   - npm config set registry https://npm.gotfix.com
-  - npm install
 
 types:
   - test
@@ -12,6 +11,7 @@ iojs-2:
   type: test
   image: gotfix/iojs:2
   script:
+  - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -20,6 +20,7 @@ iojs-latest:
   type: test
   image: gotfix/iojs:latest
   script:
+  - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -28,6 +29,7 @@ node11:
   type: test
   image: gotfix/node:0.11
   script:
+  - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -36,6 +38,7 @@ node12:
   type: test
   image: gotfix/node:0.12
   script:
+  - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
