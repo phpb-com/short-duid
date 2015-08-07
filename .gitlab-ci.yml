@@ -24,6 +24,14 @@ iojs-latest:
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
 
+node11:
+  type: test
+  image: gotfix/node:0.11
+  script:
+  - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
+  - npm run-script bench
+
 node12:
   type: test
   image: gotfix/node:0.12
