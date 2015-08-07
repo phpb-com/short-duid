@@ -1,7 +1,7 @@
 var duid = require( '../index' );
 var test = require( "unit.js" );
 var async = require( "async" );
-var bignum = require( "bignum" );
+var BN = require( "bn.js" );
 var _ = require('lodash');
 
 var check_duplicates = function ( arr ) {
@@ -259,13 +259,13 @@ describe( 'Short DUID', function () {
   describe( 'DUID with drifting time', function () {
 
     var duid_instance3 = new init( 123, salt, epoch_start );
-    var id1 = bignum( duid_instance3.getDUIDInt( 1 )[ 0 ], 10 );
+    var id1 = new BN( duid_instance3.getDUIDInt( 1 )[ 0 ], 10 );
     var drift = duid_instance3.driftTime( Math.random() * 1000 * 10 * -1 | 0 );
-    var id2 = bignum( duid_instance3.getDUIDInt( 4096 )[ 4095 ], 10 ); //Need to rollover sequence
-    var curr_ms_time = bignum( duid_instance3.getCurrentTimeMs(), 10 );
+    var id2 = new BN( duid_instance3.getDUIDInt( 4096 )[ 4095 ], 10 ); //Need to rollover sequence
+    var curr_ms_time = new BN( duid_instance3.getCurrentTimeMs(), 10 );
 
     it( 'should generate ID with ' + drift + ' millisecond drift into the past from now( ' + curr_ms_time + ' ), ' + id1 + ' should be numerically smaller than ' + id2, function () {
-      test.bool( id2.gt( id1 ) ).isTrue();
+      test.bool( id2.cmp( id1 ) === 1 ).isTrue();
     } );
 
     it( 'should consistently generate unique IDs even when time is drifting backwards constantly', function () {
