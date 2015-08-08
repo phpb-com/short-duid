@@ -23,6 +23,7 @@ namespace shortduid {
     //Setup time related variables
     auto mono_time = (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
     system_time_at_start_ = (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    // In case steady clock do not show same time as system clock
     mono_epoch_diff_ = system_time_at_start_ - mono_time;
 
     shard_id_ &= ((1ULL << 10) - 1); //Ensure that shard_id is no larger than 10 bits integer
@@ -270,7 +271,7 @@ namespace shortduid {
       std::atomic_thread_fence(std::memory_order_seq_cst); // Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
       overflow = std::atomic_compare_exchange_strong(&obj->ts_seq_[submilli_sequence], &milliseconds_since_this_epoch_copy, milliseconds_since_this_epoch + 1);
 
-      if (overflow || milliseconds_since_this_epoch_copy > milliseconds_since_this_epoch) {
+      if (overflow || milliseconds_since_this_epoch_copy > milliseconds_since_this_epoch) { // Second condition is not needed with steady clock will keep for tests
         milliseconds_since_this_epoch = milliseconds_since_this_epoch_copy + 1; // Continue drifting time
       }
 
@@ -279,9 +280,7 @@ namespace shortduid {
     }
 
     // Pack ID and return
-    return ((milliseconds_since_this_epoch) << 22) |
-           ((obj->shard_id_) << 12)  |
-           submilli_sequence;
+    return ((milliseconds_since_this_epoch) << 22) | ((obj->shard_id_) << 12) | submilli_sequence;
   }
 
 }  // namespace shortduid

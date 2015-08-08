@@ -28,26 +28,42 @@ namespace shortduid {
     explicit ShortDUID(uint32_t shard_id = 0, std::string salt = "", uint64_t epoch_start = 0);
     ~ShortDUID();
 
+    //
+    // JS stuff
+    //
+    static v8::Persistent<v8::Function> constructor;
     static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+    //
+    // Main methods
+    //
     static void GetDUIDInt(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetDUID(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetShardID(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetEpochStart(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetSalt(const v8::FunctionCallbackInfo<v8::Value>& args);
-    //HashID stuff
+    //
+    // HashID stuff
+    //
     static void HashidEncode(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void HashidDecode(const v8::FunctionCallbackInfo<v8::Value>& args);
-    //Only should be used for unit testing
+    //
+    // Only should be used for unit testing
+    //
     static void DriftTime(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetCurrentTimeMs(const v8::FunctionCallbackInfo<v8::Value>& args);
-    //Password and key generators
+    //
+    // Password and key generators
+    //
     static void GetRandomAPIKey(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void GetRandomPassword(const v8::FunctionCallbackInfo<v8::Value>& args);
-    //JS stuff
-    static v8::Persistent<v8::Function> constructor;
-    //Non JS methods
+    //
+    // Non JS methods
+    //
     static std::string GetRandomString(unsigned short len, const std::string &alphabet);
     uint64_t GetUniqueID(const v8::FunctionCallbackInfo<v8::Value>& args);
+    //
+    // Class variables
+    //
     std::atomic_ullong sequence_;
     std::atomic<uint64_t> ts_seq_[4096];
     std::string salt_;
@@ -56,7 +72,8 @@ namespace shortduid {
     uint64_t epoch_start_;
     uint32_t shard_id_;
     int64_t time_offset_;         //For testing only
-    hashidsxx::Hashids hash;
+
+    hashidsxx::Hashids hash; // Hashid instance
   };
 
 }  // namespace shortduid
