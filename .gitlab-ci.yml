@@ -47,7 +47,7 @@ node12:
 
 github_mirror:
   type: mirror
-  image: gotfix/iojs:latest
+  image: gotfix/alpine:latest
   script:
   - mkdir -p ${WORK_DIR}/mirror && cd ${WORK_DIR}/mirror
   - git clone -q --mirror https://gotfix.com/pixnr/short-duid.git 
