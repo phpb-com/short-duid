@@ -1,8 +1,5 @@
 before_script:
-  - node -v
-  - npm config set registry https://npm.gotfix.com
-  - npm config set spin false
-  - npm config set loglevel http
+  - uname -a
 
 types:
   - test
@@ -13,6 +10,10 @@ iojs-2:
   type: test
   image: gotfix/iojs:2
   script:
+  - node -v
+  - npm config set registry https://npm.gotfix.com
+  - npm config set spin false
+  - npm config set loglevel http
   - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
@@ -22,6 +23,10 @@ iojs-latest:
   type: test
   image: gotfix/iojs:latest
   script:
+  - node -v
+  - npm config set registry https://npm.gotfix.com
+  - npm config set spin false
+  - npm config set loglevel http
   - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
@@ -31,6 +36,10 @@ node11:
   type: test
   image: gotfix/node:0.11
   script:
+  - node -v
+  - npm config set registry https://npm.gotfix.com
+  - npm config set spin false
+  - npm config set loglevel http
   - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
@@ -40,6 +49,10 @@ node12:
   type: test
   image: gotfix/node:0.12
   script:
+  - node -v
+  - npm config set registry https://npm.gotfix.com
+  - npm config set spin false
+  - npm config set loglevel http
   - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
