@@ -58,6 +58,13 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 
 ### Performance
 - Using single core of baremetal `Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz` (as of 2015 Aug 3) I was able to perform **1,126,104 ops/sec**, generating integer IDs
+- Running benchmark on `Macbook Pro with 2.8 GHz Intel Core i7`, on a single core:
+    - **2,061,897 ops/sec** (single integer ID request) ==> **2,061,897** IDs per second
+    - **276,886 ops/sec** (10 integer ID requests) ==> **2,768,860** IDs per second
+    - **2,843 ops/sec** (1024 integer ID requests) ==> **2,911,232** IDs per second
+    - **725 ops/sec** (4096  integer ID requests) ==> **2,969,600** IDs per second
+    - **630,942 ops/sec** (single alphanumeric ID request) ==> **630,942** IDs per second
+    - **69,094 ops/sec** (10 alphanumeric ID requests) ==> **690,940** IDs per second
 - You can perfrom benchmark tests on your H/W by running `git clone https://gotfix.com/pixnr/short-duid.git` and `cd short-duid && npm install && npm run-script bench`
 
 ### Installation
