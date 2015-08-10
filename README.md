@@ -57,7 +57,7 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 - Simple to use
 
 ### Performance
-- Using single core of baremetal `Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz` (as of 2015 Aug 3) I was able to perform **1,126,104 ops/sec**, generating integer IDs
+- Using single core of bare-metal `Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz` (as of 2015 Aug 3) I was able to perform **1,126,104 ops/sec**, generating integer IDs
 - Running benchmark on `Macbook Pro with 2.8 GHz Intel Core i7`, on a single core:
     - **2,061,897 ops/sec** (single integer ID request) ==> **2,061,897** IDs per second
     - **276,886 ops/sec** (10 integer ID requests) ==> **2,768,860** IDs per second
@@ -65,7 +65,7 @@ There is also a sister project to write this exact module in pure JavaScript: <h
     - **725 ops/sec** (4096  integer ID requests) ==> **2,969,600** IDs per second
     - **630,942 ops/sec** (single alphanumeric ID request) ==> **630,942** IDs per second
     - **69,094 ops/sec** (10 alphanumeric ID requests) ==> **690,940** IDs per second
-- You can perfrom benchmark tests on your H/W by running `git clone https://gotfix.com/pixnr/short-duid.git` and `cd short-duid && npm install && npm run-script bench`
+- You can perform benchmark tests on your H/W by running `git clone https://gotfix.com/pixnr/short-duid.git` and `cd short-duid && npm install && npm run-script bench`
 
 ### Installation
 `npm install node-gyp -g && npm install short-duid`
@@ -100,7 +100,7 @@ Method to retrieve array of DUIDs in alphanumeric form. Length of the array is s
 
 ____
 ##### _instance_.getDUIDInt(count)
-Essential same method as `_instance_.getDUID` but insted of hashid converted integer, will return unique ID in a numeric form as string.
+Essential same method as `_instance_.getDUID` but instead of hashid converted integer, will return unique ID in a numeric form as string.
 
 ###### Returns
 - `Javascript array` object of variable length, depending on `count` parameter.
@@ -125,7 +125,7 @@ ____
 Method to get currently set custom epoch starting time in milliseconds of ShortDUID `_instance_`
 
 ###### Returns
-- `string` currently set custome epoch of ShortDUID `_instance_`, since it is unsigned 64bit integer, we return it as string.
+- `string` currently set custom epoch of ShortDUID `_instance_`, since it is unsigned 64bit integer, we return it as string.
     - Example: `"0"`
 
 ###### Parameters
@@ -361,28 +361,23 @@ So far I know of none, if you are using it in your project and do not mind shari
 _To run only benchmark, execute `npm run-script bench` after installation._
 
 ```
-$ npm test
-npm info it worked if it ends with ok
-npm info using npm@2.13.0
-npm info using node@v2.4.0
-npm info pretest short-duid@1.3.2
-npm info test short-duid@1.3.2
+MacBook-Pro:short-duid ian$ npm test && npm run bench
 
-> short-duid@1.3.2 test /builds/pixnr/short-duid
-> ./node_modules/mocha/bin/mocha --reporter spec ./test/
+> short-duid@1.4.1 test /Users/ian/GIT/short-duid
+> ./node_modules/mocha/bin/mocha —reporter spec ./test/*.js
 
 
 
   Short DUID
     #hashidEncode() and #hashidDecode()
-      ✓ should produce identical hashids from both instances for: 782313
-      ✓ should produce different hashids for two different integers: 782313 and 63616
-      ✓ decode should return same integer given output of encode as argument passed to encode: 173705
-      ✓ decode should return same array of integers given output of encode as argument passed to encode: 782313,63616,173705
-      ✓ should return hashid that is equal to "LeGxr" given [123456] as argument
-      ✓ should return hashid that is equal to [ "123456" ] given "LeGxr" as argument
-      ✓ should return hashid that is equal to "reG4QhO4NCpm" given [123456,7890,123] as argument
-      ✓ should return hashid that is equal to [123456,7890,123] given "reG4QhO4NCpm" as argument
+      ✓ should produce identical hashids from both instances for: 233596
+      ✓ should produce different hashids for two different integers: 233596 and 727342
+      ✓ decode should return same integer given output of encode as argument passed to encode: 17052
+      ✓ decode should return same array of integers given output of encode as argument passed to encode: 233596,727342,17052
+      ✓ should return hashid that is equal to “LeGxr” given [123456] as argument
+      ✓ should return hashid that is equal to [ “123456” ] given “LeGxr” as argument
+      ✓ should return hashid that is equal to “reG4QhO4NCpm” given [123456,7890,123] as argument
+      ✓ should return hashid that is equal to [123456,7890,123] given “reG4QhO4NCpm” as argument
       ✓ should return different hashids given same value and different salt
     #getRandomAPIKey()
       ✓ should return random API key 64 characters long
@@ -401,53 +396,44 @@ npm info test short-duid@1.3.2
       ✓ should return set salt, for instance #2: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
       ✓ instance #1 and instance #2 should return same salt: 39622feb2b3e7aa7208f50f45ec36fd513baadad6977b53295a3b28aeaed4a54
     #getShardID()
-      ✓ should overflow if shard_id is set to integer that does not fit in 10 bits: 1024 --> 0
+      ✓ should overflow if shard_id is set to integer that does not fit in 10 bits: 1024 —> 0
       ✓ should return set shard id for instance #1: 123
       ✓ should return set shard id for instance #2: 12
       ✓ should return different shard ids for instance #1 and instance #2
     #getDUID()
       ✓ Asked for 1 DUIDs, correctly returns 1 DUIDs
       ✓ Asked for 0 DUIDs, correctly returns 0 DUIDs
-      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs (38ms)
+      ✓ Asked for 8192 DUIDs, correctly returns 8192 DUIDs
       ✓ Asked for 8193 DUIDs, correctly returns 1 DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (109ms)
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (58ms)
     #getDUIDInt()
       ✓ Asked for 1 Int DUIDs, correctly returns 1 Integer DUIDs
       ✓ Asked for 0 Int DUIDs, correctly returns 0 Integer DUIDs
       ✓ Asked for 8192 Int DUIDs, correctly returns 8192 Integer DUIDs
       ✓ Asked for 8193 Int DUIDs, correctly returns 1 Integer DUIDs
-      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined. (47ms)
+      ✓ should have no duplicates in the returned arrays, 8192 IDs each, and combined.
     DUID with drifting time
-      ✓ should generate ID with -6625 millisecond drift into the past from now( 1438584385169 ), 22932714328403968 should be numerically smaller than 22932742132445184
-      ✓ should consistently generate unique IDs even when time is drifting backwards constantly (140ms)
+      ✓ should generate ID with -5046 millisecond drift into the past from now( 1439209924972 ), 25556418438868992 should be numerically smaller than 25556439607521280
+      ✓ should consistently generate unique IDs even when time is drifting backwards constantly (95ms)
 
 
-  37 passing (420ms)
+  37 passing (237ms)
 
-npm info posttest short-duid@1.3.2
-npm info ok 
-$ npm run-script bench
-npm info it worked if it ends with ok
-npm info using npm@2.13.0
-npm info using node@v2.4.0
-npm info prebench short-duid@1.3.2
-npm info bench short-duid@1.3.2
 
-> short-duid@1.3.2 bench /builds/pixnr/short-duid
+> short-duid@1.4.1 bench /Users/ian/GIT/short-duid
 > /usr/bin/env node benchmarks/test.js
 
-single DUIDInt generation x 1,126,104 ops/sec ±3.09% (85 runs sampled)
-batch of 10 DUIDInt generation x 140,142 ops/sec ±1.52% (82 runs sampled)
-single DUID generation x 359,803 ops/sec ±2.35% (91 runs sampled)
-batch of 10 DUID generation x 26,208 ops/sec ±8.24% (61 runs sampled)
-single DUID generation (1 character salt) x 202,120 ops/sec ±2.02% (75 runs sampled)
-batch of 10 DUID generation (1 character salt) x 22,406 ops/sec ±1.64% (87 runs sampled)
-singe getRandomAPIKey generation x 87,828 ops/sec ±1.80% (82 runs sampled)
-single getRandomPassword generation x 115,183 ops/sec ±1.64% (91 runs sampled)
-npm info postbench short-duid@1.3.2
-npm info ok 
-
-Build succeeded.
+single DUIDInt generation x 1,853,262 ops/sec ±2.36% (87 runs sampled)
+batch of 10 DUIDInt generation (multiply by 10 to get IDs per second) x 243,338 ops/sec ±2.10% (80 runs sampled)
+batch of 1024 DUIDInt generation (multiply by 1024 to get IDs per second) x 2,533 ops/sec ±1.96% (87 runs sampled)
+batch of 4096 DUIDInt generation (multiply by 4096 to get IDs per second) x 690 ops/sec ±1.73% (93 runs sampled)
+single DUID generation x 596,227 ops/sec ±2.08% (88 runs sampled)
+batch of 10 DUID generation (multiply by 10 to get IDs per second) x 68,513 ops/sec ±1.76% (91 runs sampled)
+batch of 64 DUID generation (multiply by 64 to get IDs per second) x 11,204 ops/sec ±0.64% (92 runs sampled)
+single DUID generation (1 character salt) x 694,772 ops/sec ±1.05% (89 runs sampled)
+batch of 10 DUID generation (1 character salt) x 75,430 ops/sec ±1.04% (94 runs sampled)
+singe getRandomAPIKey generation x 130,049 ops/sec ±1.15% (87 runs sampled)
+single getRandomPassword generation x 149,621 ops/sec ±1.81% (89 runs sampled)
 ```
 ## TODO
 - Add more tests, time drifting and sequence overflow could be done better than now
@@ -464,19 +450,8 @@ The MIT License (MIT)
 
 Copyright (c) 2015 Ian Matyssik <ian@phpb.com>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
