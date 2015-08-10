@@ -247,8 +247,8 @@ namespace shortduid {
   uint64_t ShortDUID::GetUniqueID(const v8::FunctionCallbackInfo<v8::Value>& args) {
     // Generate distributed-safe unique ID based on milliseconds timestanp, sequence, and shard id
     // 42bits (not bytes) are for milliseconds, should fit 139 years of milliseconds
-    // 10 bytes for shard ID, 2^10 shards (1024)
-    // 12 bytes for atomic sequence, 2^12 unique numbers per millisecond (4096)
+    // 10 bits for shard ID, 2^10 shards (1024)
+    // 12 bits for atomic sequence, 2^12 unique numbers per millisecond (4096)
 
     ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
  
