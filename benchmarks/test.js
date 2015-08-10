@@ -10,16 +10,28 @@ suit.add('single DUIDInt generation', function () {
     duid.getDUIDInt(1);
 });
 
-suit.add('batch of 10 DUIDInt generation', function () {
+suit.add('batch of 10 DUIDInt generation (multiply by 10 to get IDs per second)', function () {
     duid.getDUIDInt(10);
+});
+
+suit.add('batch of 1024 DUIDInt generation (multiply by 1024 to get IDs per second)', function () {
+    duid.getDUIDInt(1024);
+});
+
+suit.add('batch of 4096 DUIDInt generation (multiply by 4096 to get IDs per second)', function () {
+    duid.getDUIDInt(4096);
 });
 
 suit.add('single DUID generation', function () {
     duid.getDUID(1);
 });
 
-suit.add('batch of 10 DUID generation', function () {
+suit.add('batch of 10 DUID generation (multiply by 10 to get IDs per second)', function () {
     duid.getDUID(10);
+});
+
+suit.add('batch of 64 DUID generation (multiply by 64 to get IDs per second)', function () {
+    duid.getDUID(64);
 });
 
 suit.add('single DUID generation (1 character salt)', function () {
