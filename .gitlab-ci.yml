@@ -1,5 +1,7 @@
 before_script:
   - uname -a
+  - export TERM=xterm
+  - export LC_ALL=en_US.UTF-8
 
 types:
   - test
