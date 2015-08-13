@@ -46,14 +46,14 @@ namespace hashidsxx {
 		if (min_separators == 1)
 		  min_separators = 2;
 		if (min_separators > _separators.length()) {
-			int split_at = min_separators - _separators.length();
+			auto split_at = min_separators - _separators.length();
 			_separators.append(_alphabet.substr(0, split_at));
 			_alphabet = _alphabet.substr(split_at);
 		  };
 	  };
 
 	_alphabet = _reorder(_alphabet, _salt);
-	int num_guards = (int)std::ceil((float)_alphabet.length() / RATIO_GUARDS);
+	auto num_guards = (int)std::ceil((float)_alphabet.length() / RATIO_GUARDS);
 
 	if (_alphabet.length() < 3) {
 		_guards = _separators.substr(0, num_guards);
@@ -81,8 +81,6 @@ namespace hashidsxx {
 
   std::string &Hashids::_reorder(std::string &input,
                                  const std::string &salt) const {
-	// Borrowed from one of the hashids C implementations,
-  // magnitudes faster than original string concatination based shuffle
 	int i, j, v, p;
 
 	if (salt.empty())
@@ -101,7 +99,7 @@ namespace hashidsxx {
 
   std::string Hashids::_reorder_norewrite(const std::string &input,
                                           const std::string &salt) const {
-	std::string output(input);
+	auto output(input);
 	return _reorder(output, salt);
   }
 
@@ -129,7 +127,7 @@ namespace hashidsxx {
 
   void Hashids::_ensure_length(std::string &output, std::string &alphabet,
                                int values_hash) const {
-	int guard_index = (values_hash + output[0]) % _guards.size();
+	auto guard_index = (values_hash + output[0]) % _guards.size();
 	output.insert(output.begin(), _guards[guard_index]);
 
 	if (output.size() < _min_length) {
@@ -137,15 +135,15 @@ namespace hashidsxx {
 		output.push_back(_guards[guard_index]);
 	  };
 
-	int split_at = alphabet.size() / 2;
+	auto split_at = alphabet.size() / 2;
 	while (output.size() < _min_length) {
 		alphabet = _reorder_norewrite(alphabet, alphabet);
 
 		output = alphabet.substr(split_at) + output + alphabet.substr(0, split_at);
 
-		int excess = output.size() - _min_length;
+		auto excess = output.size() - _min_length;
 		if (excess > 0) {
-			int from_index = excess / 2;
+			auto from_index = excess / 2;
 			output = output.substr(from_index, _min_length);
 		  };
 	  };
@@ -156,7 +154,7 @@ namespace hashidsxx {
 	std::vector<std::string> parts;
 	std::string tmp;
 
-	for (char c : input) {
+	for (auto c : input) {
 		if (splitters.find(c) != std::string::npos) {
 			parts.push_back(tmp);
 			tmp.clear();
@@ -172,9 +170,9 @@ namespace hashidsxx {
   std::vector<uint64_t> Hashids::decode(const std::string &input) const {
 	std::vector<uint64_t> output;
 
-	std::vector<std::string> parts = _split(input, _guards);
+	auto parts = _split(input, _guards);
 
-	std::string hashid = parts[0];
+	auto hashid = parts[0];
 	if (parts.size() >= 2)
 	  hashid = parts[1];
 
@@ -184,13 +182,13 @@ namespace hashidsxx {
 	output.reserve(parts.size());
 
 	char lottery = hashid[0];
-	std::string alphabet(_alphabet);
+	auto alphabet(_alphabet);
 
 	hashid.erase(hashid.begin());
 
-	std::vector<std::string> hash_parts = _split(hashid, _separators);
+	auto hash_parts = _split(hashid, _separators);
 	for (const std::string &part : hash_parts) {
-		std::string alphabet_salt = (lottery + _salt + alphabet);
+		auto alphabet_salt = (lottery + _salt + alphabet);
 		alphabet_salt = alphabet_salt.substr(0, alphabet.size());
 
 		alphabet = _reorder(alphabet, alphabet_salt);
