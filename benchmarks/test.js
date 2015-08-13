@@ -22,6 +22,10 @@ suit.add('batch of 4096 DUIDInt generation (multiply by 4096 to get IDs per seco
     duid.getDUIDInt(4096);
 });
 
+suit.add('batch of 8192 DUIDInt generation (multiply by 8192 to get IDs per second)', function () {
+    duid.getDUIDInt(8192);
+});
+
 suit.add('single DUID generation', function () {
     duid.getDUID(1);
 });

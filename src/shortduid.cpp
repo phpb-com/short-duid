@@ -246,7 +246,7 @@ namespace shortduid {
 
   uint64_t ShortDUID::GetUniqueID(const v8::FunctionCallbackInfo<v8::Value>& args) {
     // Generate distributed-safe unique ID based on milliseconds timestanp, sequence, and shard id
-    // 42bits (not bytes) are for milliseconds, should fit 139 years of milliseconds
+    // 42 bits (not bytes) are for milliseconds, should fit 139 years of milliseconds
     // 10 bits for shard ID, 2^10 shards (1024)
     // 12 bits for atomic sequence, 2^12 unique numbers per millisecond (4096)
 
@@ -257,10 +257,9 @@ namespace shortduid {
 
     // Create milliseconds since custom epoch, we want those numbers short
     uint64_t milliseconds_since_this_epoch = milliseconds_since_epoch - (obj->epoch_start_ + obj->time_offset_);
-    uint64_t milliseconds_since_this_epoch_copy(milliseconds_since_this_epoch);
 
     // Create submillisecond sequence number
-    uint64_t submilli_sequence = obj->sequence_.fetch_add(1, std::memory_order_seq_cst);
+    uint64_t submilli_sequence = obj->sequence_.fetch_add(1, std::memory_order_relaxed); //Order is not important, only atomicity
     submilli_sequence &= ((1ULL << 12) - 1); // Bitmask for the sequence, allows to go up to 4095
 
     {
@@ -268,6 +267,8 @@ namespace shortduid {
       // Also, since iojs/nodejs are single-threaded, this "atomic" code is perhapse redundant. Maybe in the future this can be made
       // multithreaded, if it will give speed advantages, doubt it will. It was fun to write though ...
       bool overflow = false;
+      uint64_t milliseconds_since_this_epoch_copy(milliseconds_since_this_epoch);
+
       std::atomic_thread_fence(std::memory_order_seq_cst); // Fence against anything that might access obj->ts_seq_[submilli_sequence] while in this block
       overflow = std::atomic_compare_exchange_strong(&obj->ts_seq_[submilli_sequence], &milliseconds_since_this_epoch_copy, milliseconds_since_this_epoch + 1);
 
@@ -276,7 +277,7 @@ namespace shortduid {
       }
 
       milliseconds_since_this_epoch &= ((1ULL << 42) - 1); // We have only 42bit of space, overflow if not fitting
-      obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch); // Store timestamp of last used sequence number
+      if(false == overflow) obj->ts_seq_[submilli_sequence].store(milliseconds_since_this_epoch); // Store timestamp of last used sequence number if we did not do it earlier
     }
 
     // Pack ID and return
