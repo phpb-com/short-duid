@@ -3,6 +3,8 @@
  *
  *  https://github.com/schoentoon/hashidsxx
  *  hashidsxx may be freely distributed under the MIT license.
+ *
+ * Modifications and optimizations: (c) 2015 Ian Matyssik <ian@phpb.com>
  */
 
 #include "hashids.h"
@@ -81,7 +83,7 @@ namespace hashidsxx {
                                  const std::string &salt) const {
 	// Borrowed from one of the hashids C implementations,
   // magnitudes faster than original string concatination based shuffle
-	int i, j, v, p, temp;
+	int i, j, v, p;
 
 	if (salt.empty())
 	  return input;
@@ -91,9 +93,7 @@ namespace hashidsxx {
 		p += salt[v];
 		j = (salt[v] + v + p) % i;
 
-		temp = input[i];
-		input[i] = input[j];
-		input[j] = temp;
+		std::swap(input[i], input[j]);
 	  }
 
 	return input;

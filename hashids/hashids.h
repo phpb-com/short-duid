@@ -3,6 +3,8 @@
  *
  *  https://github.com/schoentoon/hashidsxx
  *  hashidsxx may be freely distributed under the MIT license.
+ *
+ * Modifications and optimizations: (c) 2015 Ian Matyssik <ian@phpb.com>
  */
 
 #pragma once
@@ -16,6 +18,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cmath>
+#include <future>
 
 // For C++11 we use cstdint here, use stdint.h if you want to be able
 // to link to this file with non C++11 as well
@@ -76,17 +79,17 @@ public:
 		return "";
 
 	  // Make a copy of our alphabet so we can reorder it on the fly etc
-	  std::string alphabet(_alphabet);
+	  auto alphabet(_alphabet);
 
 	  int values_hash = 0;
 	  int i = 0;
-	  for (Iterator iter = begin; iter != end; ++iter) {
+	  for (auto iter = begin; iter != end; ++iter) {
 		  values_hash += (*iter % (i + 100));
 		  ++i;
 		};
 
-	  char encoded = _alphabet[values_hash % _alphabet.size()];
-	  char lottery = encoded;
+	  auto encoded = _alphabet[values_hash % _alphabet.size()];
+	  auto lottery = encoded;
 
 	  std::string output;
 	  if (_min_length > 0)
@@ -94,12 +97,13 @@ public:
 	  output.push_back(encoded);
 
 	  i = 0;
-	  for (Iterator iter = begin; iter != end; ++iter) {
+	  for (auto iter = begin; iter != end; ++iter) {
 		  uint64_t number = *iter;
 
 		  std::string alphabet_salt;
 		  alphabet_salt.push_back(lottery);
-		  alphabet_salt.append(_salt).append(alphabet);
+		  alphabet_salt.append(_salt)
+                               .append(alphabet);
 
 		  alphabet = _reorder(alphabet, alphabet_salt);
 
@@ -110,9 +114,7 @@ public:
 		  output.push_back(_separators[number % _separators.size()]);
 		  ++i;
 		};
-
-	  // pop_back() is only available with C++11
-	  output.erase(output.end() - 1);
+	  output.pop_back();
 
 	  if (output.size() < _min_length)
 		_ensure_length(output, alphabet, values_hash);
