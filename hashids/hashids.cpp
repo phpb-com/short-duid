@@ -109,7 +109,7 @@ namespace hashidsxx {
   std::string output;
   while (true) {
     output.insert(output.begin(), alphabet[number % alphabet.size()]);
-    number /= alphabet.size()
+    number /= alphabet.size();
     if (n == 0)
       return output;
     };
