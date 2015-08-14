@@ -27,7 +27,7 @@ namespace shortduid {
     mono_epoch_diff_ = system_time_at_start_ - mono_time;
 
     shard_id_ &= ((1ULL << 10) - 1); //Ensure that shard_id is no larger than 10 bits integer
-    for(int i = 0; i < 4096; ++i) ts_seq_[i] = 0ULL; //This is used to track overflow of sequence per unit of time
+    std::fill(std::begin(ts_seq_), std::end(ts_seq_), 0ULL); //This is used to track overflow of sequence per unit of time
     //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
     if(epoch_start_ > system_time_at_start_) {
       epoch_start_ = 0ULL;
@@ -38,7 +38,7 @@ namespace shortduid {
   }
 
   void ShortDUID::Init(Local<Object> exports) {
-    Isolate* isolate = Isolate::GetCurrent();
+    auto isolate = Isolate::GetCurrent();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
@@ -63,7 +63,7 @@ namespace shortduid {
   }
 
   void ShortDUID::New(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
+    auto isolate = args.GetIsolate();
 
     if (args.IsConstructCall()) {
       std::string salt("");
@@ -94,8 +94,8 @@ namespace shortduid {
   }
 
   void ShortDUID::DriftTime(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     if(!args[0]->IsUndefined()) {
       obj->time_offset_ = args[0]->IntegerValue();
@@ -107,8 +107,8 @@ namespace shortduid {
   }
 
   void ShortDUID::GetCurrentTimeMs(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     uint64_t milliseconds_since_epoch = obj->mono_epoch_diff_ + (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 
@@ -119,14 +119,14 @@ namespace shortduid {
 
   void ShortDUID::GetDUIDInt(const FunctionCallbackInfo<Value>& args) {
     // Method to return unique uint64 integers in a string form, wrapped in JS array
-    Isolate* isolate = args.GetIsolate();
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
     cnt = (cnt > 8192) ? 1 : cnt; // Check boundaries
     v8::Handle<v8::Array> numArr = v8::Array::New( isolate, cnt );
 
-    for(unsigned short i = 0; i < cnt; ++i) {
+    for(auto i = 0; i < cnt; ++i) {
       numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(obj->GetUniqueID(args)).c_str()) );
     }
 
@@ -135,14 +135,14 @@ namespace shortduid {
 
   void ShortDUID::GetDUID(const FunctionCallbackInfo<Value>& args) {
     // Method to return unique hashed IDs in a string form, wrapped in JS array
-    Isolate* isolate = args.GetIsolate();
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     unsigned short cnt   = std::abs(args[0]->IsUndefined() ? 1 : args[0]->IntegerValue());
     cnt = (cnt > 8192) ? 1 : cnt; // Check boundaries
     v8::Handle<v8::Array> strArr = v8::Array::New( isolate, cnt );
 
-    for(unsigned short i = 0; i < cnt; ++i) {
+    for(auto i = 0; i < cnt; ++i) {
       strArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, obj->hash.encode({obj->GetUniqueID(args)}).c_str()) );
     }
 
@@ -150,16 +150,15 @@ namespace shortduid {
   }
 
   void ShortDUID::HashidEncode(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
     std::vector<uint64_t> v;
     v.reserve(numArr->Length());
     for (unsigned int i = 0; i < numArr->Length(); ++i) {
       String::Utf8Value u_uint64(numArr->Get(i)->ToString());
-      uint64_t IntVal(std::strtoull(*u_uint64, NULL, 10));
+      auto IntVal(std::strtoull(*u_uint64, NULL, 10));
       v.push_back(IntVal);
     }
 
@@ -168,14 +167,13 @@ namespace shortduid {
   }
 
   void ShortDUID::HashidDecode(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
     std::vector<uint64_t> uInt64_;
     if(args[0]->IsString()) {
       String::Utf8Value hash_(args[0]->ToString());
-      std::string hash(*hash_);
+      auto hash(*hash_);
       uInt64_ = obj->hash.decode(hash);
     }
 
@@ -188,45 +186,45 @@ namespace shortduid {
   }
 
   void ShortDUID::GetShardID(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
     args.GetReturnValue().Set(Number::New(isolate, obj->shard_id_));
   }
 
   void ShortDUID::GetEpochStart(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, std::to_string(obj->epoch_start_).c_str()));
   }
 
   void ShortDUID::GetSalt(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = args.GetIsolate();
+    auto isolate = args.GetIsolate();
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, obj->salt_.c_str()));
   }
 
   void ShortDUID::GetRandomAPIKey(const v8::FunctionCallbackInfo<v8::Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-    std::string urlsafe_alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    auto isolate = args.GetIsolate();
+    const std::string urlsafe_alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    unsigned short len   = args[0]->IsUndefined() ? 64 : args[0]->Uint32Value();
+    auto len   = args[0]->IsUndefined() ? 64 : args[0]->Uint32Value();
     len = (len > 4096) ? 64 : len; //Check boundaries
 
-    std::string ret(ShortDUID::GetRandomString(len, urlsafe_alphabet));
+    auto ret(ShortDUID::GetRandomString(len, urlsafe_alphabet));
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, ret.c_str()));
   }
 
   void ShortDUID::GetRandomPassword(const v8::FunctionCallbackInfo<v8::Value>& args) {
-    Isolate* isolate = args.GetIsolate();
-    std::string password_alphabet = "!#$%&()=-~^[{]};+:*_?/><0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    auto isolate = args.GetIsolate();
+    const std::string password_alphabet = "!#$%&()=-~^[{]};+:*_?/><0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    unsigned short len   = args[0]->IsUndefined() ? 16 : args[0]->Uint32Value();
+    auto len   = args[0]->IsUndefined() ? 16 : args[0]->Uint32Value();
     len = (len > 1024) ? 16 : len; //Check boundaries
 
-    std::string ret(ShortDUID::GetRandomString(len, password_alphabet));
+    auto ret(ShortDUID::GetRandomString(len, password_alphabet));
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, ret.c_str()));
   }
 
@@ -237,7 +235,7 @@ namespace shortduid {
 
     std::string output;
     output.reserve(len);
-    for(int i = 0; i < len; i++) {
+    for(auto i = 0; i < len; i++) {
       output.push_back(alphabet[dis(gen)]);
     }
 
@@ -250,7 +248,7 @@ namespace shortduid {
     // 10 bits for shard ID, 2^10 shards (1024)
     // 12 bits for atomic sequence, 2^12 unique numbers per millisecond (4096)
 
-    ShortDUID* obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
+    auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
  
     // Get fresh milli time since epoch from monotonic clock
     uint64_t milliseconds_since_epoch = obj->mono_epoch_diff_ + (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();

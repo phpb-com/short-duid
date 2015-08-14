@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdint>
 #include <atomic>
+#include <algorithm>
 #include <vector>
 #include <chrono>
 #include <random>
