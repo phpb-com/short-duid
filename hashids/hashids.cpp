@@ -85,7 +85,7 @@ namespace hashidsxx {
 
   if (salt.empty())
     return input;
-  if (salt.size() > UINT8_MAX || input.size() > UIN8_MAX)
+  if (salt.size() > UINT8_MAX || input.size() > UINT8_MAX)
     return input;
 
   for (i = input.length() - 1, v = 0, p = 0; i > 0; --i, ++v) {
