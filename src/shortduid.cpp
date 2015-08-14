@@ -26,7 +26,6 @@ namespace shortduid {
     // In case steady clock do not show same time as system clock
     mono_epoch_diff_ = system_time_at_start_ - mono_time;
 
-    shard_id_ &= ((1ULL << 10) - 1); //Ensure that shard_id is no larger than 10 bits integer
     std::fill(std::begin(ts_seq_), std::end(ts_seq_), 0ULL); //This is used to track overflow of sequence per unit of time
     //Check to see if custom epoch does not overflow current time and reset it to 0 if it does
     if(epoch_start_ > system_time_at_start_) {
@@ -68,6 +67,7 @@ namespace shortduid {
     if (args.IsConstructCall()) {
       std::string salt("");
       // Invoked as constructor: `new ShortDUID(...)`
+      // Ensure that shard_id is no larger than 10 bits integer
       uint32_t shard_id    = std::abs(args[0]->IsUndefined() ? 0 : args[0]->IntegerValue()) & ((1UL << 10) - 1);
       uint64_t epoch_start = 0;
 
