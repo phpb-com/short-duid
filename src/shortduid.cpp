@@ -142,7 +142,7 @@ namespace shortduid {
     cnt = (cnt > 8192) ? 1 : cnt; // Check boundaries
     v8::Handle<v8::Array> strArr = v8::Array::New( isolate, cnt );
 
-    for(auto i = 0; i < cnt; ++i) {
+    for(unsigned short i = 0; i < cnt; ++i) {
       strArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, obj->hash.encode({obj->GetUniqueID(args)}).c_str()) );
     }
 
@@ -156,7 +156,7 @@ namespace shortduid {
     v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
     std::vector<uint64_t> v;
     v.reserve(numArr->Length());
-    for (unsigned int i = 0; i < numArr->Length(); ++i) {
+    for (unsigned short i = 0; i < numArr->Length(); ++i) {
       String::Utf8Value u_uint64(numArr->Get(i)->ToString());
       auto IntVal(std::strtoull(*u_uint64, NULL, 10));
       v.push_back(IntVal);
@@ -178,7 +178,7 @@ namespace shortduid {
     }
 
     v8::Handle<v8::Array> numArr = v8::Array::New( isolate, uInt64_.size() );
-    for(unsigned int i = 0; i < uInt64_.size(); ++i) {
+    for(unsigned short i = 0; i < uInt64_.size(); ++i) {
       numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(uInt64_[i]).c_str()) );
     }
 
@@ -210,7 +210,7 @@ namespace shortduid {
     auto isolate = args.GetIsolate();
     const std::string urlsafe_alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    auto len   = args[0]->IsUndefined() ? 64 : args[0]->Uint32Value();
+    unsigned short len   = args[0]->IsUndefined() ? 64 : args[0]->Uint32Value();
     len = (len > 4096) ? 64 : len; //Check boundaries
 
     auto ret(ShortDUID::GetRandomString(len, urlsafe_alphabet));
@@ -221,7 +221,7 @@ namespace shortduid {
     auto isolate = args.GetIsolate();
     const std::string password_alphabet = "!#$%&()=-~^[{]};+:*_?/><0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    auto len   = args[0]->IsUndefined() ? 16 : args[0]->Uint32Value();
+    unsigned short len   = args[0]->IsUndefined() ? 16 : args[0]->Uint32Value();
     len = (len > 1024) ? 16 : len; //Check boundaries
 
     auto ret(ShortDUID::GetRandomString(len, password_alphabet));
@@ -235,7 +235,7 @@ namespace shortduid {
 
     std::string output;
     output.reserve(len);
-    for(auto i = 0; i < len; i++) {
+    for(unsigned short i = 0; i < len; i++) {
       output.push_back(alphabet[dis(gen)]);
     }
 
