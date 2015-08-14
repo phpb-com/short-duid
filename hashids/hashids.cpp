@@ -81,11 +81,11 @@ namespace hashidsxx {
 
   std::string &Hashids::_reorder(std::string &input,
                                  const std::string &salt) const {
-  uint8_t i, j, v, p;
+  uint32_t i, j, v, p;
 
   if (salt.empty())
     return input;
-  if (salt.size() > UINT8_MAX || input.size() > UINT8_MAX)
+  if (salt.size() > UINT32_MAX || input.size() > UINT32_MAX)
     return input;
 
   for (i = input.length() - 1, v = 0, p = 0; i > 0; --i, ++v) {
