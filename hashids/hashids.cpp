@@ -40,7 +40,7 @@ namespace hashidsxx {
   _separators = _reorder(_separators, _salt);
 
   std::size_t min_separators =
-    (int)std::ceil((float)_alphabet.length() / RATIO_SEPARATORS);
+    (std::size_t)std::ceil((float)_alphabet.length() / RATIO_SEPARATORS);
 
   if (_separators.empty() || _separators.length() < min_separators) {
     if (min_separators == 1)
@@ -53,7 +53,7 @@ namespace hashidsxx {
     };
 
   _alphabet = _reorder(_alphabet, _salt);
-  auto num_guards = (int)std::ceil((float)_alphabet.length() / RATIO_GUARDS);
+  std::size_t num_guards = (std::size_t)std::ceil((float)_alphabet.length() / RATIO_GUARDS);
 
   if (_alphabet.length() < 3) {
     _guards = _separators.substr(0, num_guards);
@@ -81,15 +81,17 @@ namespace hashidsxx {
 
   std::string &Hashids::_reorder(std::string &input,
                                  const std::string &salt) const {
-  int i, j, v, p;
+  uint8_t i, j, v, p;
 
   if (salt.empty())
+    return input;
+  if (salt.size() > UINT8_MAX || input.size() > UIN8_MAX)
     return input;
 
   for (i = input.length() - 1, v = 0, p = 0; i > 0; --i, ++v) {
     v %= salt.length();
     p += salt[v];
-    j = (salt[v] + v + p) % i;
+    j = (uint8_t)(salt[v] + v + p) % i;
 
     std::swap(input[i], input[j]);
     }
@@ -105,10 +107,13 @@ namespace hashidsxx {
 
   std::string Hashids::_hash(uint64_t number, const std::string &alphabet) const {
   std::string output;
+  uint64_t n = number;
+  uint8_t r = 0;
   while (true) {
-    output.insert(output.begin(), alphabet[number % alphabet.size()]);
-    number /= alphabet.size();
-    if (number == 0)
+    n = n / alphabet.size();
+    r = (uint8_t)n % alphabet.size();
+    output.insert(output.begin(), alphabet[r]);
+    if (n == 0)
       return output;
     };
   }
@@ -127,7 +132,7 @@ namespace hashidsxx {
 
   void Hashids::_ensure_length(std::string &output, std::string &alphabet,
                                int values_hash) const {
-  auto guard_index = (values_hash + output[0]) % _guards.size();
+  uint8_t  guard_index = (uint8_t)(values_hash + output[0]) % _guards.size();
   output.insert(output.begin(), _guards[guard_index]);
 
   if (output.size() < _min_length) {
@@ -135,7 +140,7 @@ namespace hashidsxx {
     output.push_back(_guards[guard_index]);
     };
 
-  auto split_at = alphabet.size() / 2;
+  uint8_t split_at = (uint8_t)alphabet.size() / 2;
   while (output.size() < _min_length) {
     alphabet = _reorder_norewrite(alphabet, alphabet);
 
