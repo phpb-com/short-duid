@@ -85,13 +85,11 @@ namespace hashidsxx {
 
   if (salt.empty())
     return input;
-  if (salt.size() > UINT32_MAX || input.size() > UINT32_MAX)
-    return input;
 
   for (i = input.length() - 1, v = 0, p = 0; i > 0; --i, ++v) {
     v %= salt.length();
     p += salt[v];
-    j = (uint8_t)(salt[v] + v + p) % i;
+    j = (salt[v] + v + p) % i;
 
     std::swap(input[i], input[j]);
     }
@@ -128,7 +126,7 @@ namespace hashidsxx {
   }
 
   void Hashids::_ensure_length(std::string &output, std::string &alphabet,
-                               int values_hash) const {
+                               uint32_t values_hash) const {
   auto guard_index = (values_hash + output[0]) % _guards.size();
   output.insert(output.begin(), _guards[guard_index]);
 
