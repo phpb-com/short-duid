@@ -110,7 +110,7 @@ namespace hashidsxx {
   while (true) {
     output.insert(output.begin(), alphabet[number % alphabet.size()]);
     number /= alphabet.size();
-    if (n == 0)
+    if (number == 0)
       return output;
     };
   }
