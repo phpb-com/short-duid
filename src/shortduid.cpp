@@ -155,11 +155,14 @@ namespace shortduid {
 
     v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
     std::vector<uint64_t> v;
-    v.reserve(numArr->Length());
-    for (unsigned short i = 0; i < numArr->Length(); ++i) {
-      String::Utf8Value u_uint64(numArr->Get(i)->ToString());
-      auto IntVal(std::strtoull(*u_uint64, NULL, 10));
-      v.push_back(IntVal);
+    // Check boundaries
+    if( numArr->Length() <= 64 ) {
+      v.reserve(numArr->Length());
+      for (unsigned short i = 0; i < numArr->Length(); ++i) {
+        String::Utf8Value u_uint64(numArr->Get(i)->ToString());
+        auto IntVal(std::strtoull(*u_uint64, NULL, 10));
+        v.push_back(IntVal);
+      }
     }
 
     std::string _hash(obj->hash.encode(v.begin(), v.end()));
@@ -170,16 +173,17 @@ namespace shortduid {
     auto isolate = args.GetIsolate();
     auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    std::vector<uint64_t> uInt64_;
-    if(args[0]->IsString()) {
+    std::vector<uint64_t> v_uInt64_;
+    // Check stringness and boundaries, we do not want to have opportunity for DOS here
+    if(args[0]->IsString() && args[0]->ToString()->Length() <= 1024) {
       String::Utf8Value hash_(args[0]->ToString());
       auto hash(*hash_);
-      uInt64_ = obj->hash.decode(hash);
+      v_uInt64_ = obj->hash.decode(hash);
     }
 
-    v8::Handle<v8::Array> numArr = v8::Array::New( isolate, uInt64_.size() );
-    for(unsigned short i = 0; i < uInt64_.size(); ++i) {
-      numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(uInt64_[i]).c_str()) );
+    v8::Handle<v8::Array> numArr = v8::Array::New( isolate, v_uInt64_.size() );
+    for(unsigned short i = 0; i < v_uInt64_.size(); ++i) {
+      numArr->Set( v8::Number::New(isolate, i), String::NewFromUtf8(isolate, std::to_string(v_uInt64_[i]).c_str()) );
     }
 
     args.GetReturnValue().Set(numArr);
