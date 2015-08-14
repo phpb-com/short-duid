@@ -107,12 +107,9 @@ namespace hashidsxx {
 
   std::string Hashids::_hash(uint64_t number, const std::string &alphabet) const {
   std::string output;
-  uint64_t n = number;
-  uint8_t r = 0;
   while (true) {
-    n = n / alphabet.size();
-    r = (uint8_t)n % alphabet.size();
-    output.insert(output.begin(), alphabet[r]);
+    output.insert(output.begin(), alphabet[number % alphabet.size()]);
+    number /= alphabet.size()
     if (n == 0)
       return output;
     };
@@ -132,7 +129,7 @@ namespace hashidsxx {
 
   void Hashids::_ensure_length(std::string &output, std::string &alphabet,
                                int values_hash) const {
-  uint8_t  guard_index = (uint8_t)(values_hash + output[0]) % _guards.size();
+  auto guard_index = (values_hash + output[0]) % _guards.size();
   output.insert(output.begin(), _guards[guard_index]);
 
   if (output.size() < _min_length) {
@@ -140,7 +137,7 @@ namespace hashidsxx {
     output.push_back(_guards[guard_index]);
     };
 
-  uint8_t split_at = (uint8_t)alphabet.size() / 2;
+  auto split_at = alphabet.size() / 2;
   while (output.size() < _min_length) {
     alphabet = _reorder_norewrite(alphabet, alphabet);
 
