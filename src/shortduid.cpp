@@ -153,20 +153,22 @@ namespace shortduid {
     auto isolate = args.GetIsolate();
     auto obj = ObjectWrap::Unwrap<ShortDUID>(args.Holder());
 
-    v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
-    std::vector<uint64_t> v;
-    // Check boundaries
-    if( numArr->Length() <= 64 ) {
-      v.reserve(numArr->Length());
-      for (unsigned short i = 0; i < numArr->Length(); ++i) {
-        String::Utf8Value u_uint64(numArr->Get(i)->ToString());
-        auto IntVal(std::strtoull(*u_uint64, NULL, 10));
-        v.push_back(IntVal);
+    if (args[0]->IsArray()) {
+      v8::Handle<v8::Array> numArr = v8::Handle<v8::Array>::Cast(args[0]);
+      std::vector<uint64_t> v;
+      // Check boundaries
+      if( numArr->Length() <= 64 ) {
+        v.reserve(numArr->Length());
+        for (unsigned short i = 0; i < numArr->Length(); ++i) {
+          String::Utf8Value u_uint64(numArr->Get(i)->ToString());
+          auto IntVal(std::strtoull(*u_uint64, NULL, 10));
+          v.push_back(IntVal);
+        }
       }
-    }
 
-    std::string _hash(obj->hash.encode(v.begin(), v.end()));
-    args.GetReturnValue().Set(String::NewFromUtf8(isolate, _hash.c_str()));
+      std::string _hash(obj->hash.encode(v.begin(), v.end()));
+      args.GetReturnValue().Set(String::NewFromUtf8(isolate, _hash.c_str()));
+    }
   }
 
   void ShortDUID::HashidDecode(const FunctionCallbackInfo<Value>& args) {
