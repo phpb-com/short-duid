@@ -28,6 +28,11 @@ describe( 'Short DUID', function () {
 
   describe( '#hashidEncode() and #hashidDecode()', function () {
 
+    it( 'should not segfault if argument is not array', function () {
+      test.value( duid_instance1.hashidEncode( random_integer1 ) )
+          .isIdenticalTo( undefined );
+    } );
+
     it( 'should produce identical hashids from both instances for: ' + random_integer1, function () {
       test.value( duid_instance1.hashidEncode( [ random_integer1 ] ) )
           .isIdenticalTo( duid_instance2.hashidEncode( [ random_integer1 ] ) );
