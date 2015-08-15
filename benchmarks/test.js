@@ -6,7 +6,6 @@ var suit = new Benchmark.Suite;
 var duid = ShortDUID.init(0, "b130389689f522fa8b6664eb291083551ff0c00a4cf5a4905fdee8cd9063e55a", 1433116800000);
 var duid_small_salt = ShortDUID.init(0, "a", 1433116800000);
 
-/*
 suit.add('single DUIDInt generation', function () {
     duid.getDUIDInt(1);
 });
@@ -27,7 +26,6 @@ suit.add('batch of 8192 DUIDInt generation (multiply by 8192 to get IDs per seco
     duid.getDUIDInt(8192);
 });
 
-*/
 suit.add('single DUID generation', function () {
     duid.getDUID(1);
 });

@@ -63,7 +63,7 @@ public:
 #if __cplusplus >= 201103
   template <typename Number, typename std::enable_if<std::is_integral<Number>::value, int>::type* = nullptr>
   std::string encode(const std::initializer_list<Number> &input) const {
-    return encode(input.begin(), input.end());
+    return encode(std::begin(input), std::end(input));
   }
 
   template <typename ... Number>

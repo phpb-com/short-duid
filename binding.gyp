@@ -9,12 +9,13 @@
         'hashids/hashids.cpp',
       ],
       'cflags': [
-        '-std=c++11'
+        '-std=c++11',
+        '-Ofast'
       ],
       'conditions': [
         [ 'OS=="mac"', {
           "xcode_settings": {
-            'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+            'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++','-Ofast'],
             'OTHER_LDFLAGS': ['-stdlib=libc++'],
             'MACOSX_DEPLOYMENT_TARGET': '10.9'
           }

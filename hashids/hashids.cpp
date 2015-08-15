@@ -27,12 +27,12 @@ namespace hashidsxx {
                    const std::string &alphabet)
   : _salt(salt), _alphabet(alphabet), _min_length(min_length), _separators(),
   _guards() {
-  std::for_each(separators.begin(), separators.end(), [this](char c) {
+  std::for_each(std::begin(separators), std::end(separators), [this](char c) {
     if (_alphabet.find(c) != std::string::npos)
     _separators.push_back(c);
   });
   _alphabet.erase(
-    std::remove_if(_alphabet.begin(), _alphabet.end(), [this](char c) {
+    std::remove_if(std::begin(_alphabet), std::end(_alphabet), [this](char c) {
     return _separators.find(c) != std::string::npos;
   }), _alphabet.end());
   if (_alphabet.size() + _separators.size() < 16)
@@ -106,19 +106,13 @@ namespace hashidsxx {
 
   std::string Hashids::_hash(uint64_t number, const std::string &alphabet) const {
   std::string output;
+  uint_fast16_t rem;
   do {
-    output.insert(output.begin(), alphabet[number % (uint32_t)alphabet.size()]);
+    rem = number % (uint32_t)alphabet.size();
     number /= (uint32_t)alphabet.size();
+    output.insert(std::begin(output), std::move(alphabet[rem]));
   } while (number);
   return output;
-/*
-  while (true) {
-    output.insert(output.begin(), alphabet[number % alphabet.size()]);
-    number /= alphabet.size();
-    if (number == 0)
-      return output;
-    };
-*/
   }
 
   uint64_t Hashids::_unhash(const std::string &input,
@@ -135,21 +129,21 @@ namespace hashidsxx {
 
   void Hashids::_ensure_length(std::string &output, std::string &alphabet,
                                uint32_t values_hash) const {
-  auto guard_index = (values_hash + output[0]) % _guards.size();
-  output.insert(output.begin(), _guards[guard_index]);
+  uint32_t guard_index = (values_hash + output[0]) % _guards.size();
+  output.insert(std::begin(output), _guards[guard_index]);
 
   if (output.size() < _min_length) {
     guard_index = (values_hash + output[2]) % _guards.size();
     output.push_back(_guards[guard_index]);
     };
 
-  auto split_at = alphabet.size() / 2;
+  uint32_t split_at = alphabet.size() / 2;
   while (output.size() < _min_length) {
     alphabet = _reorder_norewrite(alphabet, alphabet);
 
     output = alphabet.substr(split_at) + output + alphabet.substr(0, split_at);
 
-    auto excess = output.size() - _min_length;
+    uint32_t excess = output.size() - _min_length;
     if (excess > 0) {
       auto from_index = excess / 2;
       output = output.substr(from_index, _min_length);
@@ -164,10 +158,11 @@ namespace hashidsxx {
 
   for (auto c : input) {
     if (splitters.find(c) != std::string::npos) {
-      parts.push_back(tmp);
-      tmp.clear();
-      } else
-      tmp.push_back(c);
+        parts.push_back(tmp);
+        tmp.clear();
+      } else {
+        tmp.push_back(c);
+      }
     };
   if (!tmp.empty())
     parts.push_back(tmp);
@@ -192,7 +187,7 @@ namespace hashidsxx {
   char lottery = hashid[0];
   auto alphabet(_alphabet);
 
-  hashid.erase(hashid.begin());
+  hashid.erase(std::begin(hashid));
 
   auto hash_parts = _split(hashid, _separators);
   for (const std::string &part : hash_parts) {
