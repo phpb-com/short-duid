@@ -21,6 +21,9 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 
 ### Changelog
+- 1.4.3
+  - Native code clean-up and optimizations, slightly improved hashid encoding and unique ID generation performance.
+  - Fix bug where hashidEncode would cause segfault if non-array argument was passed.
 - 1.4.0
   - No API changes. Changed dev dependency to use bn.js instead of bignum. confirmed compatibility with node 0.11, 0.12, iojs 2.5, 3
 - 1.3.3
