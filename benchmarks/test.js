@@ -6,6 +6,14 @@ var suit = new Benchmark.Suite;
 var duid = ShortDUID.init(0, "b130389689f522fa8b6664eb291083551ff0c00a4cf5a4905fdee8cd9063e55a", 1433116800000);
 var duid_small_salt = ShortDUID.init(0, "a", 1433116800000);
 
+suit.add('single hashidEncode of 18446744073709551615 (UINT64_MAX)', function () {
+    duid.hashidEncode("18446744073709551615");
+});
+
+suit.add('single hashidEncode of 18446744073', function () {
+    duid.hashidEncode("18446744073");
+});
+
 suit.add('single DUIDInt generation', function () {
     duid.getDUIDInt(1);
 });
