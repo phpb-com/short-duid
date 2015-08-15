@@ -7,11 +7,11 @@ var duid = ShortDUID.init(0, "b130389689f522fa8b6664eb291083551ff0c00a4cf5a4905f
 var duid_small_salt = ShortDUID.init(0, "a", 1433116800000);
 
 suit.add('single hashidEncode of 18446744073709551615 (UINT64_MAX)', function () {
-        duid.hashidEncode(["18446744073709551615"]);
+    duid.hashidEncode(["18446744073709551615"]);
 });
 
 suit.add('single hashidEncode of 18446744073', function () {
-        duid.hashidEncode(["18446744073"]);
+    duid.hashidEncode(["18446744073"]);
 });
 
 suit.add('single DUIDInt generation', function () {
