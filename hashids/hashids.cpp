@@ -17,6 +17,7 @@
 #include <iterator>
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
 
 namespace hashidsxx {
 
@@ -81,15 +82,15 @@ namespace hashidsxx {
 
   std::string &Hashids::_reorder(std::string &input,
                                  const std::string &salt) const {
-  uint32_t i, j, v, p;
+  uint_fast16_t i, j, v, p;
 
-  if (salt.empty())
+  if (salt.empty() || input.size() > UINT_FAST16_MAX || salt.size() > UINT_FAST16_MAX)
     return input;
 
   for (i = input.length() - 1, v = 0, p = 0; i > 0; --i, ++v) {
     v %= salt.length();
     p += salt[v];
-    j = (salt[v] + v + p) % i;
+    j = (uint16_t)(salt[v] + v + p) % i;
 
     std::swap(input[i], input[j]);
     }
@@ -105,12 +106,19 @@ namespace hashidsxx {
 
   std::string Hashids::_hash(uint64_t number, const std::string &alphabet) const {
   std::string output;
+  do {
+    output.insert(output.begin(), alphabet[number % (uint32_t)alphabet.size()]);
+    number /= (uint32_t)alphabet.size();
+  } while (number);
+  return output;
+/*
   while (true) {
     output.insert(output.begin(), alphabet[number % alphabet.size()]);
     number /= alphabet.size();
     if (number == 0)
       return output;
     };
+*/
   }
 
   uint64_t Hashids::_unhash(const std::string &input,

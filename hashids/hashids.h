@@ -131,7 +131,7 @@ private:
   std::string _hash(uint64_t number, const std::string &alphabet) const;
   uint64_t _unhash(const std::string &input, const std::string &alphabet) const;
   void _ensure_length(std::string &output, std::string &alphabet,
-                      int values_hash) const;
+                      uint32_t values_hash) const;
   std::vector<std::string> _split(const std::string &hash,
                                   const std::string &splitters) const;
   };
