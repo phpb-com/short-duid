@@ -94,8 +94,9 @@ release:
   type: release
   image: iojs:latest
   script:
-  - npm config set registry https://registry.npmjs.com
+  - npm config set registry https://registry.npmjs.com/
   - echo ${NPM_TOKEN} >> ~/.npmrc
+  - npm owner ls
   - npm publish
   only:
   - tags
