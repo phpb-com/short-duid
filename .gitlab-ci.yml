@@ -92,11 +92,10 @@ github_mirror:
 
 release:
   type: release
-  image: iojs:latest
+  image: node:latest
   script:
-  - npm config set registry https://registry.npmjs.com/
-  - echo ${NPM_TOKEN} >> ~/.npmrc
-  - npm owner ls
+  - echo ${NPM_TOKEN}
+  - echo ${NPM_TOKEN} > ~/.npmrc
   - npm publish
   only:
   - tags
