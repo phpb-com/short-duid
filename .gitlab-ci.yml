@@ -94,7 +94,6 @@ release:
   type: release
   image: node:latest
   script:
-  - echo ${NPM_TOKEN}
   - echo ${NPM_TOKEN} > ~/.npmrc
   - npm publish
   only:
