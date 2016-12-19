@@ -9,6 +9,7 @@ before_script:
   - npm config set spin false
   - npm config set loglevel http
   - npm install node-gyp
+  - node_modules/node-gyp/bin/node-gyp.js configure rebuild
 
 types:
   - test
@@ -21,7 +22,6 @@ iojs-2:
   script:
   - node -v
   - npm install
-  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -32,7 +32,6 @@ iojs-latest:
   script:
   - node -v
   - npm install
-  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -43,7 +42,6 @@ node12:
   script:
   - node -v
   - npm install
-  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -54,7 +52,6 @@ node-latest:
   script:
   - node -v
   - npm install
-  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
