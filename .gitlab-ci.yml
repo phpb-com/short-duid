@@ -20,8 +20,7 @@ iojs-2:
   script:
   - node -v
   - npm install
-  - ls build/*
-  - ls build/*/*
+  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -32,8 +31,7 @@ iojs-latest:
   script:
   - node -v
   - npm install
-  - ls build/*
-  - ls build/*/*
+  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -44,8 +42,7 @@ node12:
   script:
   - node -v
   - npm install
-  - ls build/*
-  - ls build/*/*
+  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -56,8 +53,7 @@ node-latest:
   script:
   - node -v
   - npm install
-  - ls build/*
-  - ls build/*/*
+  - ls *
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
