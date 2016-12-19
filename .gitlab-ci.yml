@@ -37,6 +37,10 @@ node12:
   image: node:0.12
   <<: *job_definition
 
+node6:
+  image: node:6
+  <<: *job_definition
+
 node-latest:
   image: node:latest
   <<: *job_definition
