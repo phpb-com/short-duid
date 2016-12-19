@@ -13,7 +13,6 @@ iojs-2:
   image: iojs:2
   script:
   - node -v
-  - npm config set registry https://npm.gotfix.com
   - npm config set spin false
   - npm config set loglevel http
   - npm install
@@ -26,7 +25,6 @@ iojs-latest:
   image: iojs:latest
   script:
   - node -v
-  - npm config set registry https://npm.gotfix.com
   - npm config set spin false
   - npm config set loglevel http
   - npm install
@@ -39,7 +37,6 @@ node11:
   image: node:0.11
   script:
   - node -v
-  - npm config set registry https://npm.gotfix.com
   - npm config set spin false
   - npm config set loglevel http
   - npm install
@@ -52,7 +49,6 @@ node12:
   image: node:0.12
   script:
   - node -v
-  - npm config set registry https://npm.gotfix.com
   - npm config set spin false
   - npm config set loglevel http
   - npm install
