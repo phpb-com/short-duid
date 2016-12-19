@@ -1,1 +1,1 @@
-Follow the style you observe in the code and you should be fine.
+Follow the style you observe in the code and you should be fine. I do not have any particular preferences toward any style, as long as the project is small.
