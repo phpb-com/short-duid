@@ -2,6 +2,12 @@ before_script:
   - uname -a
   - export TERM=xterm
   - export LC_ALL=en_US.UTF-8
+  - npm config set registry http://registry.npmjs.org/
+  - npm config set proxy http://${LOCAL_PROXY}
+  - npm config set https-proxy http://${LOCAL_PROXY}
+  - npm config set strict-ssl false
+  - npm config set spin false
+  - npm config set loglevel http
 
 types:
   - test
@@ -13,14 +19,9 @@ iojs-2:
   image: iojs:2
   script:
   - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
   - npm install
-  - npm install bindings
+  - ls build/*
+  - ls build/*/*
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -30,14 +31,9 @@ iojs-latest:
   image: iojs:latest
   script:
   - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
   - npm install
-  - npm install bindings
+  - ls build/*
+  - ls build/*/*
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -47,14 +43,9 @@ node12:
   image: node:0.12
   script:
   - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
   - npm install
-  - npm install bindings
+  - ls build/*
+  - ls build/*/*
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -64,14 +55,9 @@ node-latest:
   image: node:latest
   script:
   - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
   - npm install
-  - npm install bindings
+  - ls build/*
+  - ls build/*/*
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
