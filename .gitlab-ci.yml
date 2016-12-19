@@ -8,6 +8,7 @@ before_script:
   - npm config set strict-ssl false
   - npm config set spin false
   - npm config set loglevel http
+  - npm install node-gyp
 
 types:
   - test
