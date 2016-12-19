@@ -20,6 +20,7 @@ iojs-2:
   - npm config set spin false
   - npm config set loglevel http
   - npm install
+  - npm install bindings
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -36,6 +37,7 @@ iojs-latest:
   - npm config set spin false
   - npm config set loglevel http
   - npm install
+  - npm install bindings
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -52,6 +54,7 @@ node12:
   - npm config set spin false
   - npm config set loglevel http
   - npm install
+  - npm install bindings
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
@@ -68,6 +71,7 @@ node-latest:
   - npm config set spin false
   - npm config set loglevel http
   - npm install
+  - npm install bindings
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
