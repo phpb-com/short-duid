@@ -452,7 +452,6 @@ single getRandomPassword generation x 149,621 ops/sec ±1.81% (89 runs sampled)
 ## Contributing
 All are welcome to submit pull requests and patches
 
-
 ## License
 
 The MIT License (MIT)
