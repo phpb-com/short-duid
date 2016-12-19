@@ -1,3 +1,6 @@
+- 1.4.5
+    - Trying to fix build CI and npm publising, no code or functionality changes.
+
 - 1.4.4
     - Update of test dependencies, not code or functional changes.
 

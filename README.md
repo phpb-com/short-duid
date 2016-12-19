@@ -22,6 +22,8 @@ There is also a sister project to write this exact module in pure JavaScript: <h
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 
 ### Changelog
+- 1.4.5
+    - Trying to fix build CI and npm publising, no code or functionality changes.
 - 1.4.4
     - Update of test dependencies, not code or functional changes.
 - 1.4.3
