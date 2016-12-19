@@ -10,7 +10,7 @@ types:
 
 iojs-2:
   type: test
-  image: gotfix/iojs:2
+  image: iojs:2
   script:
   - node -v
   - npm config set registry https://npm.gotfix.com
@@ -23,7 +23,7 @@ iojs-2:
 
 iojs-latest:
   type: test
-  image: gotfix/iojs:latest
+  image: iojs:latest
   script:
   - node -v
   - npm config set registry https://npm.gotfix.com
@@ -36,7 +36,7 @@ iojs-latest:
 
 node11:
   type: test
-  image: gotfix/node:0.11
+  image: node:0.11
   script:
   - node -v
   - npm config set registry https://npm.gotfix.com
@@ -49,7 +49,7 @@ node11:
 
 node12:
   type: test
-  image: gotfix/node:0.12
+  image: node:0.12
   script:
   - node -v
   - npm config set registry https://npm.gotfix.com
@@ -62,7 +62,7 @@ node12:
 
 github_mirror:
   type: mirror
-  image: gotfix/alpine:latest
+  image: alpine:latest
   script:
   - mkdir -p ${WORK_DIR}/mirror && cd ${WORK_DIR}/mirror
   - git clone -q --mirror https://gotfix.com/pixnr/short-duid.git 
@@ -71,7 +71,7 @@ github_mirror:
 
 release:
   type: release
-  image: gotfix/iojs:latest
+  image: iojs:latest
   script:
   - npm config set registry https://registry.npmjs.com
   - echo ${NPM_TOKEN} >> ~/.npmrc
