@@ -44,6 +44,18 @@ node12:
   - cat /proc/cpuinfo | grep "^model name" | uniq
   - npm run-script bench
 
+node-latest:
+  type: test
+  image: node:latest
+  script:
+  - node -v
+  - npm config set spin false
+  - npm config set loglevel http
+  - npm install
+  - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
+  - npm run-script bench
+
 github_mirror:
   type: mirror
   image: alpine:latest
