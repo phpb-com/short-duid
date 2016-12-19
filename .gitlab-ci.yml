@@ -1,3 +1,18 @@
+.job_template: &job_definition
+  type: test
+  script:
+  - node -v
+  - npm config set registry http://registry.npmjs.org/
+  - npm config set proxy http://${LOCAL_PROXY}
+  - npm config set https-proxy http://${LOCAL_PROXY}
+  - npm config set strict-ssl false
+  - npm config set spin false
+  - npm config set loglevel http
+  - npm install
+  - npm test
+  - cat /proc/cpuinfo | grep "^model name" | uniq
+  - npm run-script bench
+
 before_script:
   - uname -a
   - export TERM=xterm
@@ -9,76 +24,20 @@ types:
   - release
 
 iojs-2:
-  type: test
   image: iojs:2
-  script:
-  - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install node-gyp
-  - node_modules/node-gyp/bin/node-gyp.js configure rebuild
-  - npm install
-  - npm test
-  - cat /proc/cpuinfo | grep "^model name" | uniq
-  - npm run-script bench
+  <<: *job_definition
 
 iojs-latest:
-  type: test
   image: iojs:latest
-  script:
-  - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install node-gyp
-  - node_modules/node-gyp/bin/node-gyp.js configure rebuild
-  - npm install
-  - npm test
-  - cat /proc/cpuinfo | grep "^model name" | uniq
-  - npm run-script bench
+  <<: *job_definition
 
 node12:
-  type: test
   image: node:0.12
-  script:
-  - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install node-gyp
-  - node_modules/node-gyp/bin/node-gyp.js configure rebuild
-  - npm install
-  - npm test
-  - cat /proc/cpuinfo | grep "^model name" | uniq
-  - npm run-script bench
+  <<: *job_definition
 
 node-latest:
-  type: test
   image: node:latest
-  script:
-  - node -v
-  - npm config set registry http://registry.npmjs.org/
-  - npm config set proxy http://${LOCAL_PROXY}
-  - npm config set https-proxy http://${LOCAL_PROXY}
-  - npm config set strict-ssl false
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install node-gyp
-  - node_modules/node-gyp/bin/node-gyp.js configure rebuild
-  - npm install
-  - npm test
-  - cat /proc/cpuinfo | grep "^model name" | uniq
-  - npm run-script bench
+  <<: *job_definition
 
 github_mirror:
   type: mirror
