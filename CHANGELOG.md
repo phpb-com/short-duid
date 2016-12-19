@@ -1,3 +1,6 @@
+- 1.4.4
+    - Update of test dependencies, not code or functional changes.
+
 - 1.4.3
     - Native code clean-up and optimizations, slightly improved hashid encoding and unique ID generation performance.
     - Fix bug where hashidEncode would cause segfault if non-array argument was passed.
