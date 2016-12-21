@@ -8,7 +8,7 @@
   - npm config set strict-ssl false
   - npm config set spin false
   - npm config set loglevel http
-  - npm install node-gyp
+  - npm install node-gyp@3.4.0
   - node_modules/node-gyp/bin/node-gyp.js configure rebuild
   - npm install
   - npm test
