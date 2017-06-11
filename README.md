@@ -16,7 +16,7 @@ Official repository is at <https://gotfix.com/pixnr/short-duid> and mirror is at
 
 There is also a sister project to write this exact module in pure JavaScript: <https://gotfix.com/pixnr/short-duid-js>
 
-[![build status](https://ci.gotfix.com/projects/1/status.png?ref=master)](https://ci.gotfix.com/projects/1?ref=master)
+[![build status](https://gotfix.com/pixnr/short-duid/badges/master/build.svg)](https://gotfix.com/pixnr/short-duid/commits/master)
 [![npm dependencies](https://david-dm.org/phpb-com/short-duid.svg)](https://david-dm.org/phpb-com/short-duid)
 [![npm version](https://img.shields.io/npm/v/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
 [![npm downloads](https://img.shields.io/npm/dm/short-duid.svg?style=flat-square)](https://www.npmjs.com/package/short-duid)
