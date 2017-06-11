@@ -10,6 +10,7 @@
   - npm config set loglevel http
   - npm install node-gyp@3.4.0
   - node_modules/node-gyp/bin/node-gyp.js configure rebuild
+  - npm install bindings
   - npm install
   - npm test
   - cat /proc/cpuinfo | grep "^model name" | uniq
